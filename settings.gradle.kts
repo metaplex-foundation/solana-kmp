@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "umi"
 include(":umi")
 include(":umi_public_keys")
+include(":base58")

@@ -1,7 +1,9 @@
 package com.metaplex.umi_public_keys
 
-import fr.acinq.bitcoin.Base58
-import fr.acinq.bitcoin.io.ByteArrayOutput
+import com.ditchoom.buffer.PlatformBuffer
+import com.ditchoom.buffer.allocate
+import com.metaplex.base58.encodeToBase58String
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -47,8 +49,8 @@ class PublicKeyTests {
         )
         val key3 = PublicKey(byteKey)
 
-        assertEquals(key3.toBase58(), Base58.encode(byteKey))
-        assertEquals(Base58.encode(byteKey), Base58.encode(PublicKey(key3.toBase58()).toByteArray()))
+        assertEquals(key3.toBase58(), byteKey.encodeToBase58String())
+        assertEquals(byteKey.encodeToBase58String(), PublicKey(key3.toBase58()).toByteArray().encodeToBase58String())
     }
 
     @Test
@@ -61,15 +63,17 @@ class PublicKeyTests {
     @Test
     fun readPubkey() {
         val key = PublicKey("11111111111111111111111111111111")
-        val bos = ByteArrayOutput()
-        bos.write(1)
-        bos.write(key.toByteArray())
-        val bytes = bos.toByteArray()
+        val bufferSize = 1 + key.toByteArray().count()
+        val bos = PlatformBuffer.allocate(bufferSize)
+        bos.writeByte(1)
+        bos.writeBytes(key.toByteArray())
+        bos.resetForRead()
+        val bytes = bos.readByteArray(bufferSize)
         assertEquals(key.toString(), PublicKey.readPubkey(bytes, 1).toString())
     }
 
     @Test
-    fun createProgramAddress() {
+    fun createProgramAddress() = runBlocking {
         val programId = PublicKey("BPFLoader1111111111111111111111111111111111")
         var programAddress = PublicKey.createProgramAddress(
             listOf(PublicKey("SeedPubey1111111111111111111111111111111111").toByteArray()),
@@ -94,7 +98,7 @@ class PublicKeyTests {
     }
 
     @Test
-    fun findProgramAddress() {
+    fun findProgramAddress() = runBlocking {
         val programId = PublicKey("BPFLoader1111111111111111111111111111111111")
         val programAddress =
             PublicKey.findProgramAddress(listOf("".encodeToByteArray()), programId)
@@ -109,7 +113,7 @@ class PublicKeyTests {
     }
 
     @Test
-    fun findProgramAddress1() {
+    fun findProgramAddress1() = runBlocking {
         val programId = PublicKey("6Cust2JhvweKLh4CVo1dt21s2PJ86uNGkziudpkNPaCj")
         val programId2 = PublicKey("BPFLoader1111111111111111111111111111111111")
         val programAddress = PublicKey.findProgramAddress(
