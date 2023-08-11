@@ -1,11 +1,13 @@
 package com.metaplex.umi_public_keys
 
-import fr.acinq.bitcoin.Base58
-import fr.acinq.bitcoin.Crypto.isPubKeyValid
-import fr.acinq.bitcoin.io.ByteArrayOutput
-import fr.acinq.bitcoin.Crypto.sha256
+import com.ditchoom.buffer.PlatformBuffer
+import com.ditchoom.buffer.allocate
+import com.metaplex.base58.decodeBase58
+import com.metaplex.base58.encodeToBase58String
+import diglol.crypto.Ed25519
+import diglol.crypto.Hash
 
-const val PUBLIC_KEY_LENGTH = 32;
+const val PUBLIC_KEY_LENGTH = 32
 
 /**
  * The amount of bytes in a public key.
@@ -16,11 +18,11 @@ data class PublicKey(val pubkey: ByteArray) {
         require(pubkey.size <= PUBLIC_KEY_LENGTH) { "Invalid public key input" }
     }
 
-    constructor(pubkeyString: String) : this(Base58.decode(pubkeyString))
+    constructor(pubkeyString: String) : this(pubkeyString.decodeBase58())
 
     fun toByteArray(): ByteArray = pubkey
 
-    fun toBase58(): String = Base58.encode(pubkey)
+    fun toBase58(): String = pubkey.encodeToBase58String()
 
     fun equals(pubkey: PublicKey): Boolean = this.pubkey.contentEquals(pubkey.toByteArray())
 
@@ -48,33 +50,34 @@ data class PublicKey(val pubkey: ByteArray) {
             return PublicKey(buf)
         }
 
-        fun createProgramAddress(seeds: List<ByteArray>, programId: PublicKey): PublicKey {
-            val buffer = ByteArrayOutput()
+        suspend fun createProgramAddress(seeds: List<ByteArray>, programId: PublicKey): PublicKey {
+            val seedSize = seeds.sumOf { it.count() }
+            val bufferSize = seedSize + programId.toByteArray().count() + "ProgramDerivedAddress".encodeToByteArray().count()
+            val buffer = PlatformBuffer.allocate(bufferSize)
             for (seed in seeds) {
                 require(seed.size <= 32) { "Max seed length exceeded" }
                 try {
-                    buffer.write(seed)
+                    buffer.writeBytes(seed)
                 } catch (e: Exception) {
                     throw RuntimeException(e)
                 }
             }
             try {
-                buffer.write(programId.toByteArray())
-                buffer.write("ProgramDerivedAddress".encodeToByteArray())
+                buffer.writeBytes(programId.toByteArray())
+                buffer.writeBytes("ProgramDerivedAddress".encodeToByteArray())
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }
-
-            val hash = sha256(buffer.toByteArray())
-
-            /*if (!isPubKeyValid(hash)) {
+            buffer.resetForRead()
+            val hash = Hash(type = Hash.Type.SHA256).hash(buffer.readByteArray(bufferSize))
+            /*if (TweetNaclFast.is_on_curve(hash) != 0) {
                 throw RuntimeException("Invalid seeds, address must fall off the curve")
             }*/
             return PublicKey(hash)
         }
 
         @Throws(Exception::class)
-        fun findProgramAddress(
+        suspend fun findProgramAddress(
             seeds: List<ByteArray>,
             programId: PublicKey
         ): ProgramDerivedAddress {
