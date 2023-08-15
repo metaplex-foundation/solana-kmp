@@ -9,7 +9,7 @@ import com.metaplex.solana_interfaces.Transaction
 import com.metaplex.solana_interfaces.TransactionInstruction
 import com.metaplex.solana_keypair.SolanaKeypair
 import com.metaplex.solana_public_keys.PublicKey
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
@@ -20,7 +20,7 @@ class MessageTest {
 
     @OptIn(ExperimentalEncodingApi::class)
     @Test
-    fun transactionBuilderTest() = runBlocking {
+    fun transactionBuilderTest() = runTest {
         val memo = "Test memo"
         val transaction: Transaction = SolanaTransactionBuilder()
             .addInstruction(
@@ -40,7 +40,7 @@ class MessageTest {
 
     @OptIn(ExperimentalEncodingApi::class)
     @Test
-    fun transactionBuilderTest2() = runBlocking {
+    fun transactionBuilderTest2() = runTest {
         val memo = "Other Test memo"
         val transaction: Transaction = SolanaTransactionBuilder()
             .addInstruction(
