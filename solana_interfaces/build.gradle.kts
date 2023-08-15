@@ -3,9 +3,6 @@ plugins {
     id("com.android.library")
 }
 
-val bufferVersion = "1.3.0"
-val cryptoVersion = "0.1.4"
-
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
@@ -33,13 +30,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solana_eddsa")))
-                implementation(project(mapOf("path" to ":solana_keypair")))
+                //put your multiplatform dependencies here
                 implementation(project(mapOf("path" to ":solana_public_keys")))
-                implementation(project(mapOf("path" to ":solana_interfaces")))
-                implementation(project(mapOf("path" to ":base58")))
-                implementation("com.ditchoom:buffer:$bufferVersion")
-                implementation("com.diglol.crypto:crypto:$cryptoVersion")
             }
         }
         val commonTest by getting {
@@ -51,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.umi"
+    namespace = "com.metaplex.umi_interfaces"
     compileSdk = 33
     defaultConfig {
         minSdk = 24

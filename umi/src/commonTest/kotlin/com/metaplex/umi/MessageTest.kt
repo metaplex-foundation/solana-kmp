@@ -1,10 +1,14 @@
 package com.metaplex.umi
 
 import com.metaplex.base58.decodeBase58
+import com.metaplex.solana_eddsa.SolanaEddsa
 import com.metaplex.umi.MemoProgram.writeUtf8
-import com.metaplex.umi_public_keys.PublicKey
-import diglol.crypto.Ed25519
-import diglol.crypto.KeyPair
+import com.metaplex.solana_interfaces.AccountMeta
+import com.metaplex.solana_interfaces.Signer
+import com.metaplex.solana_interfaces.Transaction
+import com.metaplex.solana_interfaces.TransactionInstruction
+import com.metaplex.solana_keypair.SolanaKeypair
+import com.metaplex.solana_public_keys.PublicKey
 import kotlinx.coroutines.runBlocking
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -18,7 +22,7 @@ class MessageTest {
     @Test
     fun transactionBuilderTest() = runBlocking {
         val memo = "Test memo"
-        val transaction: Transaction = TransactionBuilder()
+        val transaction: Transaction = UmiTransactionBuilder()
             .addInstruction(
                 writeUtf8(
                     signer().publicKey,
@@ -38,7 +42,7 @@ class MessageTest {
     @Test
     fun transactionBuilderTest2() = runBlocking {
         val memo = "Other Test memo"
-        val transaction: Transaction = TransactionBuilder()
+        val transaction: Transaction = UmiTransactionBuilder()
             .addInstruction(
                 writeUtf8(
                     signer().publicKey,
@@ -58,17 +62,16 @@ class MessageTest {
 
         suspend fun signer(): HotSigner {
             val privateKey = "4Z7cXSyeFR8wNGMVXUE1TwtKn5D5Vu7FzEv69dokLv7KrQk7h6pu4LF8ZRR9yQBhc7uSM6RTTZtU1fmaxiNrxXrs".decodeBase58().copyOfRange(0, 32)
-            return HotSigner(Ed25519.generateKeyPair(privateKey))
+            val k = SolanaEddsa.createKeypairFromSecretKey(privateKey)
+            return HotSigner(SolanaKeypair(k.publicKey, k.secretKey))
         }
     }
 
 }
 
-class HotSigner(private val keyPair: KeyPair) : Signer {
-    override val publicKey: PublicKey = PublicKey(keyPair.publicKey)
-    override suspend fun signMessage(message: ByteArray): ByteArray {
-        return Ed25519.sign(keyPair, message)
-    }
+class HotSigner(private val keyPair: SolanaKeypair) : Signer {
+    override val publicKey: PublicKey = keyPair.publicKey
+    override suspend fun signMessage(message: ByteArray): ByteArray = SolanaEddsa.sign(message, keyPair)
 
     override suspend fun signTransaction(transaction: Transaction): Transaction {
         transaction.sign(this)
