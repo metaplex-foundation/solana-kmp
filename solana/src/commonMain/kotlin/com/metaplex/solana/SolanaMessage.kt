@@ -1,4 +1,4 @@
-package com.metaplex.umi
+package com.metaplex.solana
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
@@ -24,7 +24,7 @@ class WrappedInstruction(
 }
 
 
-class UmiMessage(
+class SolanaMessage(
     override val header: MessageHeader,
     override val accountKeys: List<PublicKey>,
     override val recentBlockhash: String,
@@ -158,7 +158,7 @@ class UmiMessage(
                 )
             }
 
-            return UmiMessage(
+            return SolanaMessage(
                 header = MessageHeader().apply {
                     this.numRequiredSignatures = numRequiredSignatures.toByte()
                     this.numReadonlySignedAccounts = numReadonlySignedAccounts.toByte()

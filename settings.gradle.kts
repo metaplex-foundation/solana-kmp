@@ -14,8 +14,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "umi"
-include(":umi")
+rootProject.name = "solana"
+include(":solana")
 include(":solana_public_keys")
 include(":base58")
 include(":solana_eddsa")

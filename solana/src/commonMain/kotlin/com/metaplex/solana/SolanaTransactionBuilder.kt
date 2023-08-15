@@ -1,12 +1,12 @@
-package com.metaplex.umi
+package com.metaplex.solana
 
 import com.metaplex.solana_interfaces.Signer
 import com.metaplex.solana_interfaces.Transaction
 import com.metaplex.solana_interfaces.TransactionBuilder
 import com.metaplex.solana_interfaces.TransactionInstruction
 
-class UmiTransactionBuilder : TransactionBuilder {
-    private val transaction: Transaction = UmiTransaction()
+class SolanaTransactionBuilder : TransactionBuilder {
+    private val transaction: Transaction = SolanaTransaction()
     override fun addInstruction(transactionInstruction: TransactionInstruction): TransactionBuilder {
         transaction.add(transactionInstruction)
         return this

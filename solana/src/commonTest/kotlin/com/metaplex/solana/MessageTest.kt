@@ -1,8 +1,8 @@
-package com.metaplex.umi
+package com.metaplex.solana
 
 import com.metaplex.base58.decodeBase58
 import com.metaplex.solana_eddsa.SolanaEddsa
-import com.metaplex.umi.MemoProgram.writeUtf8
+import com.metaplex.solana.MemoProgram.writeUtf8
 import com.metaplex.solana_interfaces.AccountMeta
 import com.metaplex.solana_interfaces.Signer
 import com.metaplex.solana_interfaces.Transaction
@@ -22,7 +22,7 @@ class MessageTest {
     @Test
     fun transactionBuilderTest() = runBlocking {
         val memo = "Test memo"
-        val transaction: Transaction = UmiTransactionBuilder()
+        val transaction: Transaction = SolanaTransactionBuilder()
             .addInstruction(
                 writeUtf8(
                     signer().publicKey,
@@ -42,7 +42,7 @@ class MessageTest {
     @Test
     fun transactionBuilderTest2() = runBlocking {
         val memo = "Other Test memo"
-        val transaction: Transaction = UmiTransactionBuilder()
+        val transaction: Transaction = SolanaTransactionBuilder()
             .addInstruction(
                 writeUtf8(
                     signer().publicKey,

@@ -1,4 +1,4 @@
-package com.metaplex.umi
+package com.metaplex.solana
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
@@ -26,7 +26,7 @@ const val PACKET_DATA_SIZE = 1280 - 40 - 8
 
 const val SIGNATURE_LENGTH = 64
 
-class UmiTransaction: Transaction {
+class SolanaTransaction: Transaction {
     var signatures = mutableListOf<SignaturePubkeyPair>()
     val signature: ByteArray?
         get() = signatures.firstOrNull()?.signature
@@ -315,7 +315,7 @@ class UmiTransaction: Transaction {
             instruction.accounts.forEach { keyIndex -> require(keyIndex >= 0) }
         }
 
-        return UmiMessage(
+        return SolanaMessage(
             header = MessageHeader().apply {
                 this.numRequiredSignatures = numRequiredSignatures.toByte()
                 this.numReadonlySignedAccounts = numReadonlySignedAccounts.toByte()
@@ -390,11 +390,11 @@ class UmiTransaction: Transaction {
                 signatures.add(signature.toByteArray().encodeToBase58String())
             }
 
-            return populate(UmiMessage.from(byteArray), signatures)
+            return populate(SolanaMessage.from(byteArray), signatures)
         }
 
         fun populate(message: Message, signatures: List<String>): Transaction {
-            val transaction = UmiTransaction()
+            val transaction = SolanaTransaction()
             transaction.recentBlockhash = message.recentBlockhash
             if (message.header.numRequiredSignatures > 0) {
                 transaction.feePayer = message.accountKeys[0]
