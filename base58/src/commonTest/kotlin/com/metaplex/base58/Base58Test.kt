@@ -23,7 +23,7 @@ class Base58Test {
     )
 
     @Test
-    fun encodingToBase58Works() = runBlocking{
+    fun encodingToBase58Works() = runBlocking {
         TEST_VECTORS.forEach {
             assertEquals(it.value, it.key.decodeHexToBytes()!!.encodeToBase58String())
         }
