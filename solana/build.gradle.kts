@@ -5,6 +5,7 @@ plugins {
 
 val bufferVersion = "1.3.0"
 val cryptoVersion = "0.1.4"
+val kotlinxCoroutines = "1.7.3"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -39,12 +40,13 @@ kotlin {
                 implementation(project(mapOf("path" to ":solana_interfaces")))
                 implementation(project(mapOf("path" to ":base58")))
                 implementation("com.ditchoom:buffer:$bufferVersion")
-                implementation("com.diglol.crypto:crypto:$cryptoVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
             }
         }
     }
