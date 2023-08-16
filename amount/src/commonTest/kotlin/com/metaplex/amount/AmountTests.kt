@@ -1,13 +1,30 @@
-package com.metaplex.solana_interfaces
+package com.metaplex.amount
 
 import com.ionspin.kotlin.bignum.integer.BigInteger
-import com.metaplex.solana_interfaces.errors.SolanaError
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotSame
 import kotlin.test.assertTrue
+
+
+/**
+ * An amount of US dollars represented using the lowest possible unit — i.e. cents.
+ * @category Utils — Amounts
+ */
+typealias UsdAmount = Amount<String, Int>
+
+/**
+ * Creates a UsdAmount from the provided decimal value in USD.
+ * @category Utils — Amounts
+ */
+fun usd(usd: Int): UsdAmount {
+    return usd(usd.toDouble())
+}
+fun usd(usd: Double): UsdAmount {
+    return createAmountFromDecimals(usd, "USD", 2)
+}
 
 class AmountTests {
     @Test
@@ -86,11 +103,11 @@ class AmountTests {
 
     @Test
     fun testCurrencyMismatchError() {
-        val error = assertFailsWith<SolanaError.AmountMismatchError> {
+        val error = assertFailsWith<AmountErrors.AmountMismatchError> {
             addAmounts(sol(1), usd(1))
         }
 
-        assertTrue(error is SolanaError.AmountMismatchError)
+        assertTrue(error is AmountErrors.AmountMismatchError)
         assertEquals("SOL", error.left.identifier)
         assertEquals("USD", error.right.identifier)
         assertEquals("add", error.operation)

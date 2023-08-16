@@ -1,5 +1,6 @@
 package com.metaplex.solana_interfaces
 
+import com.metaplex.amount.SolAmount
 import com.metaplex.solana_interfaces.errors.SolanaError
 import com.metaplex.solana_public_keys.PublicKey
 
