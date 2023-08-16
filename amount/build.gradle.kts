@@ -30,9 +30,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
-                implementation(project(mapOf("path" to ":solana_public_keys")))
-                implementation(project(mapOf("path" to ":amount")))
+                implementation("com.ionspin.kotlin:bignum:0.3.8")
             }
         }
         val commonTest by getting {
@@ -44,7 +42,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.umi_interfaces"
+    namespace = "com.metaplex.amount"
     compileSdk = 33
     defaultConfig {
         minSdk = 24

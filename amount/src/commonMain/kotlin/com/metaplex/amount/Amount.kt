@@ -1,8 +1,6 @@
-package com.metaplex.solana_interfaces
+package com.metaplex.amount
 
 import com.ionspin.kotlin.bignum.integer.BigInteger
-import com.ionspin.kotlin.bignum.integer.toBigInteger
-import com.metaplex.solana_interfaces.errors.SolanaError
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 
@@ -43,12 +41,6 @@ data class Amount<I : AmountIdentifier, D : AmountDecimals>(
  * @category Utils — Amounts
  */
 typealias SolAmount = Amount<String, Int>
-
-/**
- * An amount of US dollars represented using the lowest possible unit — i.e. cents.
- * @category Utils — Amounts
- */
-typealias UsdAmount = Amount<String, Int>
 
 /**
  * A percentage represented in basis points using a given number of decimals.
@@ -180,17 +172,6 @@ fun <I : AmountIdentifier, D : AmountDecimals> isAmount(
     return amount.identifier == identifier && amount.decimals == decimals
 }
 
-
-/**
- * Creates a UsdAmount from the provided decimal value in USD.
- * @category Utils — Amounts
- */
-fun usd(usd: Int): UsdAmount {
-    return usd(usd.toDouble())
-}
-fun usd(usd: Double): UsdAmount {
-    return createAmountFromDecimals(usd, "USD", 2)
-}
 /**
  * Ensures that a given amount has the provided identifier and decimals.
  * @category Utils — Amounts
@@ -201,7 +182,7 @@ fun <I : AmountIdentifier, D : AmountDecimals> assertAmount(
     decimals: D
 ) {
     if (!isAmount(amount, identifier, decimals)) {
-        throw SolanaError.UnexpectedAmountError(amount, identifier, decimals)
+        throw AmountErrors.UnexpectedAmountError(amount, identifier, decimals)
     }
 }
 
@@ -223,7 +204,7 @@ fun assertSameAmounts(
     operation: String? = null
 ) {
     if (!sameAmounts(left, right)) {
-        throw SolanaError.AmountMismatchError(left, right, operation)
+        throw AmountErrors.AmountMismatchError(left, right, operation)
     }
 }
 
