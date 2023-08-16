@@ -1,5 +1,6 @@
 package com.metaplex.solana
 
+import com.metaplex.solana_interfaces.Blockhash
 import com.metaplex.solana_interfaces.Signer
 import com.metaplex.solana_interfaces.Transaction
 import com.metaplex.solana_interfaces.TransactionBuilder
@@ -12,7 +13,7 @@ class SolanaTransactionBuilder : TransactionBuilder {
         return this
     }
 
-    override fun setRecentBlockHash(recentBlockHash: String): TransactionBuilder {
+    override fun setRecentBlockHash(recentBlockHash: Blockhash): TransactionBuilder {
         transaction.setRecentBlockHash(recentBlockHash)
         return this
     }

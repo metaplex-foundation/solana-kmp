@@ -2,7 +2,38 @@ package com.metaplex.solana_interfaces
 
 import com.metaplex.solana_public_keys.PublicKey
 
-val DEFAULT_SIGNATURE = ByteArray(0)
+/**
+ * A Uint8Array that represents a transaction signature.
+ * @category Transactions
+ */
+typealias TransactionSignature = ByteArray
+
+/**
+ * A Uint8Array that represents the serialized message of a transaction.
+ * @category Transactions
+ */
+typealias SerializedTransactionMessage = ByteArray
+
+/**
+ * A Uint8Array that represents a serialized transaction.
+ * @category Transactions
+ */
+typealias SerializedTransaction = ByteArray
+
+
+/**
+ * Defines a transaction error.
+ * @category Transactions
+ */
+typealias TransactionError = String;
+
+/**
+ * The maximum amount of bytes that can be used for a transaction.
+ * @category Transactions
+ */
+val TRANSACTION_SIZE_LIMIT = 1232;
+
+val DEFAULT_SIGNATURE = TransactionSignature(0)
 
 /**
  * Defines an account required by an instruction.
@@ -33,7 +64,7 @@ data class TransactionInstruction(
 )
 
 data class SignaturePubkeyPair(
-    var signature: ByteArray?,
+    var signature: TransactionSignature?,
     val publicKey: PublicKey
 )
 
@@ -41,6 +72,12 @@ class NonceInformation(
     val nonce: String,
     val nonceInstruction: TransactionInstruction
 )
+
+/**
+ * Defines a blockhash.
+ * @category Transactions
+ */
+typealias Blockhash = String
 
 /**
  * Represents a transaction that can be constructed, signed, and executed within a certain context.
@@ -96,7 +133,7 @@ interface Transaction {
      * @param pubkey The public key associated with the signature.
      * @param signature The signature as a byte array.
      */
-    fun addSignature(pubkey: PublicKey, signature: ByteArray)
+    fun addSignature(pubkey: PublicKey, signature: TransactionSignature)
 
     /**
      * Verifies the signatures present on the transaction.
@@ -117,7 +154,7 @@ interface Transaction {
      *
      * @return The transaction data buffer as a byte array.
      */
-    fun serializeMessage(): ByteArray
+    fun serializeMessage(): SerializedTransactionMessage
 
     /**
      * Serializes the transaction into the wire format.
@@ -125,7 +162,7 @@ interface Transaction {
      * @param config Serialization configuration options (optional).
      * @return The serialized transaction as a byte array.
      */
-    suspend fun serialize(config: SerializeConfig = SerializeConfig()): ByteArray
+    suspend fun serialize(config: SerializeConfig = SerializeConfig()): SerializedTransaction
 
     /**
      * Serializes the transaction with additional sign data.
@@ -133,5 +170,5 @@ interface Transaction {
      * @param signData The additional sign data to include in serialization.
      * @return The serialized transaction as a byte array.
      */
-    suspend fun serialize(signData: ByteArray): ByteArray
+    suspend fun serialize(signData: ByteArray): SerializedTransactionMessage
 }
