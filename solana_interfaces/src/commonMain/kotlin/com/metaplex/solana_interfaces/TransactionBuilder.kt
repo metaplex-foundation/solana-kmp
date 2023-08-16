@@ -1,5 +1,6 @@
 package com.metaplex.solana_interfaces
 
+
 /**
  * This interface defines a TransactionBuilder, which is responsible for constructing a transaction.
  */
@@ -19,7 +20,7 @@ interface TransactionBuilder {
      * @param recentBlockHash The recent block hash to set for the transaction.
      * @return This TransactionBuilder instance after setting the recent block hash.
      */
-    fun setRecentBlockHash(recentBlockHash: String): TransactionBuilder
+    fun setRecentBlockHash(recentBlockHash: Blockhash): TransactionBuilder
 
     /**
      * Sets the signers for the transaction.

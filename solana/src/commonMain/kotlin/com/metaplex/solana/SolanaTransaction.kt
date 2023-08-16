@@ -12,10 +12,13 @@ import com.metaplex.solana_interfaces.Message
 import com.metaplex.solana_interfaces.MessageHeader
 import com.metaplex.solana_interfaces.NonceInformation
 import com.metaplex.solana_interfaces.SerializeConfig
+import com.metaplex.solana_interfaces.SerializedTransaction
+import com.metaplex.solana_interfaces.SerializedTransactionMessage
 import com.metaplex.solana_interfaces.SignaturePubkeyPair
 import com.metaplex.solana_interfaces.Signer
 import com.metaplex.solana_interfaces.Transaction
 import com.metaplex.solana_interfaces.TransactionInstruction
+import com.metaplex.solana_interfaces.TransactionSignature
 import com.metaplex.solana_public_keys.PublicKey
 
 /**
@@ -112,12 +115,12 @@ class SolanaTransaction: Transaction {
         }
     }
 
-    override fun addSignature(pubkey: PublicKey, signature: ByteArray) {
+    override fun addSignature(pubkey: PublicKey, signature: TransactionSignature) {
         compile() // Ensure signatures array is populated
         _addSignature(pubkey, signature)
     }
 
-    private fun _addSignature(pubkey: PublicKey, signature: ByteArray) {
+    private fun _addSignature(pubkey: PublicKey, signature: TransactionSignature) {
         require(signature.count() == 64)
 
         val index = this.signatures.indexOfFirst { sigpair ->
@@ -331,14 +334,14 @@ class SolanaTransaction: Transaction {
     /**
      * Get a buffer of the Transaction data that need to be covered by signatures
      */
-    override fun serializeMessage(): ByteArray {
+    override fun serializeMessage(): SerializedTransactionMessage {
         return compile().serialize()
     }
 
     /**
      * Serialize the Transaction in the wire format.
      */
-    override suspend fun serialize(config: SerializeConfig): ByteArray {
+    override suspend fun serialize(config: SerializeConfig): SerializedTransaction {
         val signData = this.serializeMessage()
         if (config.verifySignatures &&
             !this.verifySignatures(signData, config.requireAllSignatures)
@@ -349,7 +352,7 @@ class SolanaTransaction: Transaction {
         return this.serialize(signData)
     }
 
-    override suspend fun serialize(signData: ByteArray): ByteArray {
+    override suspend fun serialize(signData: ByteArray): SerializedTransaction {
         val signatureCount = Shortvec.encodeLength(signatures.count())
         val transactionLength = signatureCount.count() + signatures.count() * 64 + signData.count()
         val wireTransaction = PlatformBuffer.allocate(transactionLength)

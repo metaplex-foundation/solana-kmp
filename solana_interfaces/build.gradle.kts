@@ -32,6 +32,7 @@ kotlin {
             dependencies {
                 //put your multiplatform dependencies here
                 implementation(project(mapOf("path" to ":solana_public_keys")))
+                implementation("com.ionspin.kotlin:bignum:0.3.8")
             }
         }
         val commonTest by getting {
