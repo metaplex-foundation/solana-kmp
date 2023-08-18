@@ -9,7 +9,7 @@ val cryptoVersion = "0.1.4"
 kotlin {
     targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"

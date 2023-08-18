@@ -11,7 +11,7 @@ val kotlinxCoroutines = "1.7.3"
 kotlin {
     targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"

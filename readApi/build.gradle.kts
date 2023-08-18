@@ -1,7 +1,13 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization") version "1.9.0"
     id("com.android.library")
 }
+
+val bufferVersion = "1.3.0"
+val ktorVersion = "2.3.3"
+val serializationVersion = "1.6.0-RC"
+val kotlinxCoroutines = "1.7.3"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -30,21 +36,24 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
-                implementation(project(mapOf("path" to ":solana_interfaces")))
                 implementation(project(mapOf("path" to ":solana_public_keys")))
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                implementation("com.github.lamba92:KRandomStrings:1.0.1")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
             }
         }
     }
 }
 
 android {
-    namespace = "com.metaplex.solana_keypair"
+    namespace = "com.metaplex.base58"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
