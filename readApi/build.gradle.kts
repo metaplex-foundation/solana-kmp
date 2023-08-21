@@ -1,10 +1,13 @@
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization") version "1.9.0"
     id("com.android.library")
 }
 
 val bufferVersion = "1.3.0"
-val cryptoVersion = "0.1.4"
+val ktorVersion = "2.3.3"
+val serializationVersion = "1.6.0-RC"
+val kotlinxCoroutines = "1.7.3"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -17,6 +20,7 @@ kotlin {
             }
         }
     }
+
     jvm()
     listOf(
         iosX64(),
@@ -26,29 +30,33 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "umi_public_keys"
+            baseName = "umi"
         }
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
-                implementation(project(mapOf("path" to ":base58")))
-                implementation("com.ditchoom:buffer:$bufferVersion")
-                implementation("com.diglol.crypto:crypto:$cryptoVersion")
+                implementation(project(mapOf("path" to ":solana_public_keys")))
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
+                implementation("com.github.lamba92:KRandomStrings:1.0.1")
+                implementation("io.github.funkatronics:rpccore:0.2.0")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
             }
         }
     }
 }
 
 android {
-    namespace = "com.metaplex.umi_public_keys"
+    namespace = "com.metaplex.base58"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
