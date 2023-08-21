@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 class ReadApiDecoratorTests {
 
     private val readApiDecorator = ReadApiDecorator(
-        "https://rpc.helius.xyz/?api-key=2a834b7b-8698-41db-9d08-fc0c68e45cc7",
+        "*",
         kTorDriver(HttpClient(CIO))
     )
 
