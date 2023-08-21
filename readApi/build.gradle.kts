@@ -16,10 +16,11 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
+
     jvm()
     listOf(
         iosX64(),
@@ -40,7 +41,9 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
                 implementation("com.github.lamba92:KRandomStrings:1.0.1")
+                implementation("io.github.funkatronics:rpccore:0.2.0")
             }
         }
         val commonTest by getting {
@@ -57,5 +60,9 @@ android {
     compileSdk = 33
     defaultConfig {
         minSdk = 24
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }

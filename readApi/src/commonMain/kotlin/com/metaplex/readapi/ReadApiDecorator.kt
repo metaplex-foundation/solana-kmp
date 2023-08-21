@@ -1,14 +1,12 @@
 package com.metaplex.readapi
 
-import com.metaplex.networking.HttpNetworkDriver
-import com.metaplex.networking.Rpc20Driver
-import com.metaplex.rpcCore.JsonRpc20Request
-import com.metaplex.rpcCore.get
-import com.metaplex.serialization.PublicKeyAsStringSerializer
+import com.funkatronics.networking.HttpNetworkDriver
+import com.funkatronics.networking.Rpc20Driver
+import com.funkatronics.rpccore.JsonRpc20Request
+import com.funkatronics.rpccore.get
 import com.metaplex.solana_public_keys.PublicKey
 import it.lamba.random.uuid
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 import kotlin.random.Random
 
 

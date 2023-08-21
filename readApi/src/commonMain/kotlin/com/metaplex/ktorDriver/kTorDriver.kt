@@ -1,8 +1,7 @@
 package com.metaplex.ktorDriver
 
-import com.metaplex.networking.HttpNetworkDriver
-import com.metaplex.networking.HttpRequest
-import com.metaplex.networking.Rpc20Driver
+import com.funkatronics.networking.HttpNetworkDriver
+import com.funkatronics.networking.HttpRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody

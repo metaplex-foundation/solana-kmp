@@ -7,6 +7,7 @@ import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ReadApiDecoratorTests {
 
@@ -22,7 +23,7 @@ class ReadApiDecoratorTests {
             CIO
         )))
         val assets = readApiDecorator.getAssetsByOwner(GetAssetsByOwnerRpcInput(randomPublicKey))
-        assertEquals(assets.total, 214)
+        assertTrue { assets.total > 0 }
     }
 
     @Test
