@@ -1,6 +1,6 @@
 package com.metaplex.readapi
 
-import com.metaplex.ktorDriver.kTorDriver
+import com.metaplex.ktorDriver.KTorDriver
 import com.metaplex.solana_public_keys.PublicKey
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -13,15 +13,12 @@ class ReadApiDecoratorTests {
 
     private val readApiDecorator = ReadApiDecorator(
         "*",
-        kTorDriver(HttpClient(CIO))
+        KTorDriver(HttpClient(CIO))
     )
 
     @Test
     fun testReadApiGetAssetsByOwner() = runTest {
         val randomPublicKey = PublicKey("Geh5Ss5knQGym81toYGXDbH3MFU2JCMK7E4QyeBHor1b")
-        val readApiDecorator = ReadApiDecorator("https://rpc.helius.xyz/?api-key=2a834b7b-8698-41db-9d08-fc0c68e45cc7", kTorDriver(HttpClient(
-            CIO
-        )))
         val assets = readApiDecorator.getAssetsByOwner(GetAssetsByOwnerRpcInput(randomPublicKey))
         assertTrue { assets.total > 0 }
     }

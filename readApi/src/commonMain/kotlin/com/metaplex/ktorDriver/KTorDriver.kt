@@ -8,9 +8,9 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
 
-class kTorDriver(val ktorHttpClient: HttpClient) : HttpNetworkDriver {
+class KTorDriver(private val httpClient: HttpClient) : HttpNetworkDriver {
     override suspend fun makeHttpRequest(request: HttpRequest): String {
-        val response = ktorHttpClient.request(request.url) {
+        val response = httpClient.request(request.url) {
             request.properties.forEach { (key, value) ->
                 headers.append(key, value)
             }
