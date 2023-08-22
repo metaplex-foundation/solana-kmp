@@ -10,14 +10,28 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run Tests
-        uses: Raul6469/android-gradle-action@2.0.0
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Configure JDK
+        uses: actions/setup-java@v3
         with:
-          script: build
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+
+      # Build
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Test
+        run: ./gradlew build
+
       - name: Save Test Reports
         if: failure()
         uses: actions/upload-artifact@v3
