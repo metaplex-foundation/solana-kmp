@@ -52,6 +52,8 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
             }
         }
+        val jvmMain by getting
+        val jvmTest by getting
     }
 }
 
