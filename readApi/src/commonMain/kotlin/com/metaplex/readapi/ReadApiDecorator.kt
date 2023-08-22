@@ -5,7 +5,6 @@ import com.funkatronics.networking.Rpc20Driver
 import com.funkatronics.rpccore.JsonRpc20Request
 import com.funkatronics.rpccore.get
 import com.metaplex.solana_public_keys.PublicKey
-import it.lamba.random.uuid
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
@@ -31,7 +30,7 @@ class ReadApiDecorator(
         val params = json.encodeToJsonElement(GetAsset.serializer(), GetAsset(assetId))
         val rpcRequest = JsonRpc20Request(
             "getAsset",
-            id = Random.uuid(),
+            id = "${Random.nextInt()}",
             params = params
         )
         val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
@@ -42,7 +41,7 @@ class ReadApiDecorator(
         val params = json.encodeToJsonElement(GetAsset.serializer(), GetAsset(assetId))
         val rpcRequest = JsonRpc20Request(
             "getAssetProof",
-            id = Random.uuid(),
+            id = "${Random.nextInt()}",
             params = params
         )
         val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
@@ -53,7 +52,7 @@ class ReadApiDecorator(
         val params = json.encodeToJsonElement(GetAssetsByGroupRpcInput.serializer(), input)
         val rpcRequest = JsonRpc20Request(
             "getAssetsByGroup",
-            id = Random.uuid(),
+            id = "${Random.nextInt()}",
             params = params
         )
         val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
@@ -64,7 +63,7 @@ class ReadApiDecorator(
         val params = json.encodeToJsonElement(GetAssetsByOwnerRpcInput.serializer(), input)
         val rpcRequest = JsonRpc20Request(
             "getAssetsByOwner",
-            id = Random.uuid(),
+            id = "${Random.nextInt()}",
             params = params
         )
         val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
