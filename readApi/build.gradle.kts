@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization") version "1.9.0"
     id("com.android.library")
+    id("com.github.gmazzo.buildconfig") version "4.1.2"
 }
 
 val bufferVersion = "1.3.0"
@@ -49,6 +50,10 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
+            }
+
+            buildConfig {
+                buildConfigField("String", "DEFAULT_RPC_URL", "\"${project.properties["testing.rpc.defaultUrl"]}\"")
             }
         }
         val jvmMain by getting
