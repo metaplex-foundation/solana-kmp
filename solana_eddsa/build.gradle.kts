@@ -25,7 +25,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "umi"
+            baseName = "SolanaEddsa"
         }
     }
 

@@ -26,7 +26,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "umi_public_keys"
+            baseName = "SolanaPublicKeys"
         }
     }
 
