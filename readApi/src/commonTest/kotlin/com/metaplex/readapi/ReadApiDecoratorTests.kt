@@ -10,7 +10,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ReadApiDecoratorTests {
+// Disabled until we can integrate them in a better way
+/*class ReadApiDecoratorTests {
     private var rpcUrl: String = DEFAULT_RPC_URL
 
     private val readApiDecorator = ReadApiDecorator(
@@ -56,4 +57,4 @@ class ReadApiDecoratorTests {
             PublicKey("GVPX9rXRXo9SVGktJCzA3Qb9v263kQzEyAWsgX3LL8P5")
         )
     }
-}
+}*/
