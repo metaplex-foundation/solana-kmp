@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization") version "1.9.0"
     id("com.android.library")
+    id("com.github.gmazzo.buildconfig") version "4.1.2"
 }
 
 val bufferVersion = "1.3.0"
@@ -16,7 +17,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }
@@ -30,7 +31,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "umi"
+            baseName = "MetaplexReadApi"
         }
     }
 
@@ -42,7 +43,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
-                implementation("com.github.lamba92:KRandomStrings:1.0.1")
                 implementation("io.github.funkatronics:rpccore:0.2.0")
             }
         }
@@ -50,8 +50,11 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
             }
         }
+        val jvmMain by getting
+        val jvmTest by getting
     }
 }
 
@@ -62,7 +65,11 @@ android {
         minSdk = 24
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+buildConfig {
+    buildConfigField("String", "DEFAULT_RPC_URL", "\"${project.properties["testing.rpc.defaultUrl"]}\"")
 }
