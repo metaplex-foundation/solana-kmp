@@ -52,10 +52,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
             }
-
-            buildConfig {
-                buildConfigField("String", "DEFAULT_RPC_URL", "\"${project.properties["testing.rpc.defaultUrl"]}\"")
-            }
         }
         val jvmMain by getting
         val jvmTest by getting
@@ -72,4 +68,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+buildConfig {
+    buildConfigField("String", "DEFAULT_RPC_URL", "\"${project.properties["testing.rpc.defaultUrl"]}\"")
 }
