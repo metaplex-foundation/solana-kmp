@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("multiplatform") version "1.9.0"
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
 
 val cryptoVersion = "0.1.4"
@@ -50,7 +51,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.umi_eddsa"
+    namespace = "com.metaplex.solana_eddsa"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -59,4 +60,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+mavenPublishing {
+    coordinates("foundation.metaplex", "solana", "0.1.0")
 }

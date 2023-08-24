@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("multiplatform") version "1.9.0"
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -55,4 +56,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+mavenPublishing {
+    coordinates("foundation.metaplex", "solana_keypair", "0.1.0")
 }

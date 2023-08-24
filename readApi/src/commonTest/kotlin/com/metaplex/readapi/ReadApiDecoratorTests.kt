@@ -5,14 +5,12 @@ import com.metaplex.solana_public_keys.PublicKey
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.test.runTest
-import solana.readApi.BuildConfig.DEFAULT_RPC_URL
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-// Disabled until we can integrate them in a better way
-/*class ReadApiDecoratorTests {
-    private var rpcUrl: String = DEFAULT_RPC_URL
+class ReadApiDecoratorTests {
+    private var rpcUrl: String = "https://api.mainnet-beta.solana.com"
 
     private val readApiDecorator = ReadApiDecorator(
         rpcUrl,
@@ -57,4 +55,4 @@ import kotlin.test.assertTrue
             PublicKey("GVPX9rXRXo9SVGktJCzA3Qb9v263kQzEyAWsgX3LL8P5")
         )
     }
-}*/
+}

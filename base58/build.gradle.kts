@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("multiplatform") version "1.9.0"
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
 
 val cryptoVersion = "0.1.4"
@@ -56,4 +57,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+mavenPublishing {
+    coordinates("foundation.metaplex", "base58", "0.1.0")
 }

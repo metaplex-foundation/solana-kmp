@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("multiplatform") version "1.9.0"
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -46,7 +47,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.umi_interfaces"
+    namespace = "com.metaplex.solana_interfaces"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -55,4 +56,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+mavenPublishing {
+    coordinates("foundation.metaplex", "solana_interfaces", "0.1.0")
 }
