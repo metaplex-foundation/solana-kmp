@@ -1,7 +1,7 @@
 package foundation.metaplex.readapi
 /*
-import com.metaplex.ktorDriver.KTorDriver
-import com.metaplex.solana_public_keys.PublicKey
+import foundation.metaplex.ktorDriver.KTorDriver
+import foundation.metaplex.solana_public_keys.PublicKey
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.test.runTest
