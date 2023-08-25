@@ -83,6 +83,9 @@ publishing {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
+            signing {
+                isRequired = false
+            }
         }
     }
 }
