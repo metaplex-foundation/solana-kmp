@@ -45,7 +45,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.amount"
+    namespace = "foundation.metaplex.amount"
     compileSdk = 33
     defaultConfig {
         minSdk = 24

@@ -51,7 +51,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.solana_eddsa"
+    namespace = "foundation.metaplex.solana_eddsa"
     compileSdk = 33
     defaultConfig {
         minSdk = 24

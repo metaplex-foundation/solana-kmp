@@ -47,7 +47,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.solana_interfaces"
+    namespace = "foundation.metaplex.solana_interfaces"
     compileSdk = 33
     defaultConfig {
         minSdk = 24

@@ -48,7 +48,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.base58"
+    namespace = "foundation.metaplex.base58"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
