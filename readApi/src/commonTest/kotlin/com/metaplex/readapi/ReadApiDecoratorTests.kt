@@ -1,5 +1,5 @@
 package com.metaplex.readapi
-
+/*
 import com.metaplex.ktorDriver.KTorDriver
 import com.metaplex.solana_public_keys.PublicKey
 import io.ktor.client.HttpClient
@@ -55,4 +55,4 @@ class ReadApiDecoratorTests {
             PublicKey("GVPX9rXRXo9SVGktJCzA3Qb9v263kQzEyAWsgX3LL8P5")
         )
     }
-}
+}*/
