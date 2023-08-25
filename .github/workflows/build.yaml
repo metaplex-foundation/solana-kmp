@@ -44,7 +44,7 @@ jobs:
   publish:
     runs-on: macos-latest
     needs: build
-    # if: ${{ github.event_name == 'release' }}
+    if: ${{ github.event_name == 'release' }}
 
     steps:
       - name: Checkout

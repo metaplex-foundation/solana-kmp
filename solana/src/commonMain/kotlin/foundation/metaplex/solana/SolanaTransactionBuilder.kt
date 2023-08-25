@@ -1,10 +1,10 @@
 package foundation.metaplex.solana
 
-import foundation.metaplex.solana_interfaces.Blockhash
-import foundation.metaplex.solana_interfaces.Signer
-import foundation.metaplex.solana_interfaces.Transaction
-import foundation.metaplex.solana_interfaces.TransactionBuilder
-import foundation.metaplex.solana_interfaces.TransactionInstruction
+import foundation.metaplex.solanainterfaces.Blockhash
+import foundation.metaplex.solanainterfaces.Signer
+import foundation.metaplex.solanainterfaces.Transaction
+import foundation.metaplex.solanainterfaces.TransactionBuilder
+import foundation.metaplex.solanainterfaces.TransactionInstruction
 
 class SolanaTransactionBuilder : TransactionBuilder {
     private val transaction: Transaction = SolanaTransaction()

@@ -1,14 +1,14 @@
 package foundation.metaplex.solana
 
 import foundation.metaplex.base58.decodeBase58
-import foundation.metaplex.solana_eddsa.SolanaEddsa
+import foundation.metaplex.solanaeddsa.SolanaEddsa
 import foundation.metaplex.solana.MemoProgram.writeUtf8
-import foundation.metaplex.solana_interfaces.AccountMeta
-import foundation.metaplex.solana_interfaces.Signer
-import foundation.metaplex.solana_interfaces.Transaction
-import foundation.metaplex.solana_interfaces.TransactionInstruction
-import foundation.metaplex.solana_keypair.SolanaKeypair
-import foundation.metaplex.solana_public_keys.PublicKey
+import foundation.metaplex.solanainterfaces.AccountMeta
+import foundation.metaplex.solanainterfaces.Signer
+import foundation.metaplex.solanainterfaces.Transaction
+import foundation.metaplex.solanainterfaces.TransactionInstruction
+import foundation.metaplex.solanakeypair.SolanaKeypair
+import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi

@@ -4,11 +4,11 @@ import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
-import foundation.metaplex.solana_interfaces.CompiledInstruction
-import foundation.metaplex.solana_interfaces.Message
-import foundation.metaplex.solana_interfaces.MessageHeader
-import foundation.metaplex.solana_public_keys.PUBLIC_KEY_LENGTH
-import foundation.metaplex.solana_public_keys.PublicKey
+import foundation.metaplex.solanainterfaces.CompiledInstruction
+import foundation.metaplex.solanainterfaces.Message
+import foundation.metaplex.solanainterfaces.MessageHeader
+import foundation.metaplex.solanapublickeys.PUBLIC_KEY_LENGTH
+import foundation.metaplex.solanapublickeys.PublicKey
 
 class WrappedInstruction(
     var programIdIndex: Byte = 0,

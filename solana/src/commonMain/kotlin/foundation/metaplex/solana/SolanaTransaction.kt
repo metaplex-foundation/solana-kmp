@@ -4,22 +4,22 @@ import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
-import foundation.metaplex.solana_eddsa.SolanaEddsa
-import foundation.metaplex.solana_interfaces.AccountMeta
-import foundation.metaplex.solana_interfaces.CompiledInstruction
-import foundation.metaplex.solana_interfaces.DEFAULT_SIGNATURE
-import foundation.metaplex.solana_interfaces.Message
-import foundation.metaplex.solana_interfaces.MessageHeader
-import foundation.metaplex.solana_interfaces.NonceInformation
-import foundation.metaplex.solana_interfaces.SerializeConfig
-import foundation.metaplex.solana_interfaces.SerializedTransaction
-import foundation.metaplex.solana_interfaces.SerializedTransactionMessage
-import foundation.metaplex.solana_interfaces.SignaturePubkeyPair
-import foundation.metaplex.solana_interfaces.Signer
-import foundation.metaplex.solana_interfaces.Transaction
-import foundation.metaplex.solana_interfaces.TransactionInstruction
-import foundation.metaplex.solana_interfaces.TransactionSignature
-import foundation.metaplex.solana_public_keys.PublicKey
+import foundation.metaplex.solanaeddsa.SolanaEddsa
+import foundation.metaplex.solanainterfaces.AccountMeta
+import foundation.metaplex.solanainterfaces.CompiledInstruction
+import foundation.metaplex.solanainterfaces.DEFAULT_SIGNATURE
+import foundation.metaplex.solanainterfaces.Message
+import foundation.metaplex.solanainterfaces.MessageHeader
+import foundation.metaplex.solanainterfaces.NonceInformation
+import foundation.metaplex.solanainterfaces.SerializeConfig
+import foundation.metaplex.solanainterfaces.SerializedTransaction
+import foundation.metaplex.solanainterfaces.SerializedTransactionMessage
+import foundation.metaplex.solanainterfaces.SignaturePubkeyPair
+import foundation.metaplex.solanainterfaces.Signer
+import foundation.metaplex.solanainterfaces.Transaction
+import foundation.metaplex.solanainterfaces.TransactionInstruction
+import foundation.metaplex.solanainterfaces.TransactionSignature
+import foundation.metaplex.solanapublickeys.PublicKey
 
 /**
  * The maximum amount of bytes that can be used for a transaction.
