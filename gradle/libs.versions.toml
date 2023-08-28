@@ -11,10 +11,9 @@ rpccore = "0.2.0"
 androidGradlePlugin = "8.0.2"
 kotlin = "1.9.0"
 publish = "0.25.3"
-gradle = "8.0.2"
 
 [libraries]
-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
+gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 
 bignum = { group = "com.ionspin.kotlin", name = "bignum", version.ref = "bignum" }
 crypto = { group = "com.diglol.crypto", name = "crypto", version.ref = "crypto" }

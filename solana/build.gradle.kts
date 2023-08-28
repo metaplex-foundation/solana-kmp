@@ -4,10 +4,6 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-val bufferVersion = "1.3.0"
-val cryptoVersion = "0.1.4"
-val kotlinxCoroutines = "1.7.3"
-
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
@@ -40,14 +36,14 @@ kotlin {
                 implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(project(mapOf("path" to ":solanainterfaces")))
                 implementation(project(mapOf("path" to ":base58")))
-                implementation("com.ditchoom:buffer:$bufferVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
+                implementation(libs.buffer)
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
         val jvmMain by getting
