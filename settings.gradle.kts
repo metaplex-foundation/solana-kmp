@@ -16,10 +16,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "solana"
 include(":solana")
-include(":solana_public_keys")
+include(":solanapublickeys")
 include(":base58")
-include(":solana_eddsa")
-include(":solana_interfaces")
-include(":solana_keypair")
+include(":solanaeddsa")
+include(":solanainterfaces")
+include(":solanakeypair")
 include(":amount")
-include(":readApi")
+include(":readapi")

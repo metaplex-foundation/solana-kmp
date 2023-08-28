@@ -4,9 +4,7 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
-val bufferVersion = "1.3.0"
 val cryptoVersion = "0.1.4"
-val kotlinxCoroutines = "1.7.3"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -28,26 +26,23 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "Solana"
+            baseName = "SolanaEddsa"
         }
     }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solanaeddsa")))
-                implementation(project(mapOf("path" to ":solanakeypair")))
+                //put your multiplatform dependencies here
                 implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(project(mapOf("path" to ":solanainterfaces")))
-                implementation(project(mapOf("path" to ":base58")))
-                implementation("com.ditchoom:buffer:$bufferVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
+                implementation(project(mapOf("path" to ":solanakeypair")))
+                implementation("com.diglol.crypto:crypto:$cryptoVersion")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
             }
         }
         val jvmMain by getting
@@ -56,7 +51,7 @@ kotlin {
 }
 
 android {
-    namespace = "foundation.metaplex.solana"
+    namespace = "foundation.metaplex.solanaeddsa"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -68,7 +63,7 @@ android {
 }
 
 mavenPublishing {
-    coordinates("foundation.metaplex", "solana", "0.1.0")
+    coordinates("foundation.metaplex", "solanaeddsa", "0.1.0")
 }
 
 publishing {

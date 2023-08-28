@@ -1,6 +1,7 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("multiplatform") version "1.9.0"
     id("com.android.library")
+    id("com.vanniktech.maven.publish")
 }
 
 val cryptoVersion = "0.1.4"
@@ -47,7 +48,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.metaplex.base58"
+    namespace = "foundation.metaplex.base58"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -55,5 +56,25 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+mavenPublishing {
+    coordinates("foundation.metaplex", "base58", "0.1.0")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/metaplex-foundation/solana-kmp")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+            signing {
+                isRequired = false
+            }
+        }
     }
 }
