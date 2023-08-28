@@ -1,10 +1,8 @@
 plugins {
-    kotlin("multiplatform") version "1.9.0"
-    id("com.android.library")
-    id("com.vanniktech.maven.publish")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
 }
-
-val cryptoVersion = "0.1.4"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -34,7 +32,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
-                implementation("com.diglol.crypto:crypto:$cryptoVersion")
+                implementation(libs.crypto)
             }
         }
         val commonTest by getting {

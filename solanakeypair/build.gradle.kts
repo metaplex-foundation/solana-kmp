@@ -1,7 +1,7 @@
 plugins {
-    kotlin("multiplatform") version "1.9.0"
-    id("com.android.library")
-    id("com.vanniktech.maven.publish")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
