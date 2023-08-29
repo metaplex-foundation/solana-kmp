@@ -1,14 +1,9 @@
 plugins {
-    kotlin("multiplatform") version "1.9.0"
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
     kotlin("plugin.serialization") version "1.9.0"
-    id("com.android.library")
-    id("com.vanniktech.maven.publish")
 }
-
-val bufferVersion = "1.3.0"
-val ktorVersion = "2.3.3"
-val serializationVersion = "1.6.0-RC"
-val kotlinxCoroutines = "1.7.3"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -39,18 +34,18 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutines")
-                implementation("io.github.funkatronics:rpccore:0.2.0")
+                implementation(libs.ktor.client.core)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.rpccore)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutines")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                implementation(libs.ktor.client.cio)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
         val jvmMain by getting

@@ -1,13 +1,12 @@
 buildscript {
     dependencies {
-        classpath("com.android.tools.build:gradle:8.0.2")
+        classpath(libs.gradle)
     }
 }
 plugins {
-    //trick: for the same plugin versions in all sub-modules
-    id("com.android.library").version("8.0.2").apply(false)
-    kotlin("multiplatform").version("1.9.0").apply(false)
-    id("com.vanniktech.maven.publish").version("0.25.3").apply(false)
+    alias(libs.plugins.android.library).apply(false)
+    alias(libs.plugins.kotlin.multiplatform).apply(false)
+    alias(libs.plugins.maven.publish).apply(false)
 }
 
 tasks.register("clean", Delete::class) {

@@ -1,7 +1,7 @@
 package foundation.metaplex.readapi
-/*
+
 import foundation.metaplex.ktorDriver.KTorDriver
-import foundation.metaplex.solana_public_keys.PublicKey
+import foundation.metaplex.solanapublickeys.PublicKey
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.test.runTest
@@ -55,4 +55,4 @@ class ReadApiDecoratorTests {
             PublicKey("GVPX9rXRXo9SVGktJCzA3Qb9v263kQzEyAWsgX3LL8P5")
         )
     }
-}*/
+}

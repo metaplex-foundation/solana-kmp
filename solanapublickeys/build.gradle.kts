@@ -1,11 +1,8 @@
 plugins {
-    kotlin("multiplatform") version "1.9.0"
-    id("com.android.library")
-    id("com.vanniktech.maven.publish")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
 }
-
-val bufferVersion = "1.3.0"
-val cryptoVersion = "0.1.4"
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
@@ -36,8 +33,8 @@ kotlin {
             dependencies {
                 //put your multiplatform dependencies here
                 implementation(project(mapOf("path" to ":base58")))
-                implementation("com.ditchoom:buffer:$bufferVersion")
-                implementation("com.diglol.crypto:crypto:$cryptoVersion")
+                implementation(libs.buffer)
+                implementation(libs.crypto)
             }
         }
         val commonTest by getting {
