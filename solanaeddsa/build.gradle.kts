@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
@@ -18,6 +20,8 @@ kotlin {
         }
     }
     jvm()
+
+    val xcf = XCFramework()
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,6 +31,7 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "SolanaEddsa"
+            xcf.add(this)
         }
     }
 
