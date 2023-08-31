@@ -37,8 +37,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
-                implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation(project(mapOf("path" to ":amount")))
+                api(project(mapOf("path" to ":solanapublickeys")))
+                api(project(mapOf("path" to ":amount")))
             }
         }
         val commonTest by getting {
