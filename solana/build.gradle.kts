@@ -71,4 +71,3 @@ android {
 mavenPublishing {
     coordinates(group as String, "solana", version as String)
 }
-}
