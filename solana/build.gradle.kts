@@ -71,19 +71,4 @@ android {
 mavenPublishing {
     coordinates(group as String, "solana", version as String)
 }
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/metaplex-foundation/solana-kmp")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-            signing {
-                isRequired = false
-            }
-        }
-    }
 }
