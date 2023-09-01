@@ -1,37 +1,75 @@
 package foundation.metaplex.solanainterfaces
 
+import com.funkatronics.kborsh.BorshDecoder
+import com.funkatronics.kborsh.BorshEncoder
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
+
 /**
- * An object that can serialize and deserialize a value to and from a `ByteArray`.
- * It supports serializing looser types than it deserializes for convenience.
- * For example, a `BigInteger` serializer will always deserialize to a `BigInteger`
- * but can be used to serialize a `Number`.
- *
- * @param From The type of the value to serialize.
- * @param To The type of the deserialized value. Defaults to `From`.
- *
- * @category Serializers
+ * (De)Serializes any array of bytes as a Base64 encoded string, formatted as Json string array:
+ * output = {
+ *      [
+ *          "theBase64EncodedString",
+ *          "base64"
+ *      ]
+ * }
  */
-interface Serializer<From, To : From> {
-    /** A description for the serializer. */
-    val description: String
-    /** The fixed size of the serialized value in bytes, or `null` if it is variable. */
-    val fixedSize: Int?
-    /** The maximum size a serialized value can be in bytes, or `null` if it is variable. */
-    val maxSize: Int?
-    /** The function that serializes a value into bytes. */
-    fun serialize(value: From): ByteArray
-    /**
-     * The function that deserializes a value from bytes.
-     * It returns the deserialized value and the number of bytes read.
-     */
-    fun deserialize(buffer: ByteArray, offset: Int = 0): Pair<To, Int>
+object ByteArrayAsBase64JsonArraySerializer: KSerializer<ByteArray> {
+    private val delegateSerializer = ListSerializer(String.serializer())
+    override val descriptor: SerialDescriptor = delegateSerializer.descriptor
+
+    @OptIn(ExperimentalEncodingApi::class)
+    override fun serialize(encoder: Encoder, value: ByteArray) =
+        encoder.encodeSerializableValue(
+            delegateSerializer, listOf(
+                Base64.encode(value), "base64"
+            ))
+
+    @OptIn(ExperimentalEncodingApi::class)
+    override fun deserialize(decoder: Decoder): ByteArray {
+        decoder.decodeSerializableValue(delegateSerializer).apply {
+            if (contains("base64")) first { it != "base64" }.apply {
+                return Base64.decode(this)
+            }
+            else throw(SerializationException("Not Base64"))
+        }
+    }
 }
 
 /**
- * Defines common options for serializer factories.
- * @category Serializers
+ * Decodes/Encodes input using the Borsh encoding scheme, and serializes it as a Base64 encoded
+ * string, formatted as Json string array:
+ * output = {
+ *      [
+ *          "theBorshEncodedBytesAsBase64String",
+ *          "base64"
+ *      ]
+ * }
  */
-interface BaseSerializerOptions {
-    /** A custom description for the serializer. */
-    val description: String?
+class BorshAsBase64JsonArraySerializer<T>(private val dataSerializer: KSerializer<T>):
+    KSerializer<T?> {
+    private val delegateSerializer = ByteArrayAsBase64JsonArraySerializer
+    override val descriptor: SerialDescriptor = dataSerializer.descriptor
+
+    override fun serialize(encoder: Encoder, value: T?) =
+        encoder.encodeSerializableValue(delegateSerializer,
+            value?.let {
+                BorshEncoder().apply {
+                    encodeSerializableValue(dataSerializer, value)
+                }.borshEncodedBytes
+            } ?: byteArrayOf()
+        )
+
+    override fun deserialize(decoder: Decoder): T? =
+        decoder.decodeSerializableValue(delegateSerializer).run {
+            if (this.isEmpty()) return null
+            BorshDecoder(this).decodeSerializableValue(dataSerializer)
+        }
 }

@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.maven.publish)
-    kotlin("plugin.serialization") version "1.9.0"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -18,6 +17,7 @@ kotlin {
             }
         }
     }
+
     jvm()
 
     val xcf = XCFramework()
@@ -29,7 +29,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "SolanaInterfaces"
+            baseName = "Networking"
             xcf.add(this)
         }
     }
@@ -37,14 +37,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation(project(mapOf("path" to ":amount")))
-                implementation(libs.kotlinx.serialization.json )
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kborsh)
-                implementation(libs.crypto)
-                implementation(libs.bignum)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.cio)
                 implementation(libs.rpccore)
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         val commonTest by getting {
@@ -53,13 +49,11 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.test)
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
     }
 }
 
 android {
-    namespace = "foundation.metaplex.solanainterfaces"
+    namespace = "foundation.metaplex.networking"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -71,5 +65,21 @@ android {
 }
 
 mavenPublishing {
-    coordinates(group as String, "solanainterfaces", version as String)
+    coordinates("foundation.metaplex", "networking", "0.1.0")
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/metaplex-foundation/solana-kmp")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+            signing {
+                isRequired = false
+            }
+        }
+    }
 }

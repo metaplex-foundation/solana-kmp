@@ -1,37 +1,43 @@
 package foundation.metaplex.solanainterfaces
 
 import foundation.metaplex.amount.SolAmount
-import foundation.metaplex.solanainterfaces.errors.SolanaError
+import foundation.metaplex.solanainterfaces.serializers.AnchorAccountSerializer
+import foundation.metaplex.solanainterfaces.serializers.PublicKeyAsStringSerializer
+import foundation.metaplex.solanainterfaces.serializers.SolAmountSerializer
+import foundation.metaplex.solanainterfaces.serializers.SolanaResponseSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 
 /**
  * Describes the header of an account.
  * @category Accounts
  */
-open class AccountHeader(
-    open val executable: Boolean,
-    open val owner: PublicKey,
-    open val lamports: SolAmount,
-    open val rentEpoch: Int?
-)
+sealed class AccountHeader {
+    abstract val executable: Boolean
+    abstract val owner: PublicKey
+    abstract val lamports: SolAmount
+    abstract val rentEpoch: Int?
+}
 
 /**
  * Describes a raw account that has not been deserialized.
  * @category Accounts
  */
-data class RpcAccount(
+class RpcAccount(
     override val executable: Boolean,
     override val owner: PublicKey,
     override val lamports: SolAmount,
     override val rentEpoch: Int? = null,
     val publicKey: PublicKey,
     val data: ByteArray,
-): AccountHeader(executable, owner, lamports, rentEpoch)
+): AccountHeader()
 
 /**
  * Describes a raw account that may or may not exist.
  * @category Accounts
  */
+@Serializable
 sealed class MaybeRpcAccount {
     data class Existing(val exists: Boolean, val rpcAccount: RpcAccount) : MaybeRpcAccount()
     data class NonExisting(val exists: Boolean, val publicKey: PublicKey) : MaybeRpcAccount()
@@ -41,30 +47,24 @@ sealed class MaybeRpcAccount {
  * Describes a deserialized account.
  * @category Accounts
  */
-data class Account<T : Any>(
-    val publicKey: PublicKey,
-    val header: AccountHeader,
+@Serializable
+data class Account<T>(
+    override val executable: Boolean,
+    @Serializable(with = PublicKeyAsStringSerializer::class) override val owner: PublicKey,
+    @Serializable(with = SolAmountSerializer::class) override val lamports: SolAmount,
+    override val rentEpoch: Int,
     val data: T
-)
+): AccountHeader()
 
-/**
- * Given an account data serializer,
- * returns a deserialized account from a raw account.
- * @category Accounts
- */
-fun <From : Any, To : From> deserializeAccount(
-    rawAccount: RpcAccount,
-    dataSerializer: Serializer<From, To>
-): Account<To> {
-    val (executable, owner, lamports, rentEpoch, publicKey, data) = rawAccount
-    try {
-        val parsedData = dataSerializer.deserialize(data).first
-        return Account(owner, AccountHeader(executable, owner, lamports, rentEpoch), parsedData)
-    } catch (error: Throwable) {
-        throw SolanaError.UnexpectedAccountError(
-            owner,
-            dataSerializer.description,
-            error
+fun <A> SolanaAccountSerializer(serializer: KSerializer<A>) =
+    AccountInfoSerializer(
+        BorshAsBase64JsonArraySerializer(
+            AnchorAccountSerializer(serializer.descriptor.serialName, serializer)
         )
-    }
-}
+    )
+
+fun <D> AccountInfoSerializer(serializer: KSerializer<D>) =
+    SolanaResponseSerializer(Account.serializer(serializer))
+
+inline fun <reified A> SolanaAccountSerializer() =
+    AccountInfoSerializer<A?>(BorshAsBase64JsonArraySerializer(AnchorAccountSerializer()))

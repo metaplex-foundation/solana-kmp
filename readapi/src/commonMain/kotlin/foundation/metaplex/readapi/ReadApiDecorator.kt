@@ -17,7 +17,7 @@ interface ReadApiInterface {
 }
 
 class ReadApiDecorator(
-    private val rpcUrl: String = "https://api.invalid.solana.com",
+    private val rpcUrl: String,
     private val httpNetworkDriver: HttpNetworkDriver
 ): ReadApiInterface {
 

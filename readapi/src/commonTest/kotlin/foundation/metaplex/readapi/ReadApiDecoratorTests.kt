@@ -1,9 +1,7 @@
 package foundation.metaplex.readapi
 
-import foundation.metaplex.ktorDriver.KTorDriver
+import foundation.metaplex.networking.NetworkDriver
 import foundation.metaplex.solanapublickeys.PublicKey
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +12,7 @@ class ReadApiDecoratorTests {
 
     private val readApiDecorator = ReadApiDecorator(
         rpcUrl,
-        KTorDriver(HttpClient(CIO))
+        NetworkDriver()
     )
 
     @Test

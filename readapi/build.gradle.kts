@@ -38,6 +38,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(project(mapOf("path" to ":solanainterfaces")))
+                implementation(project(mapOf("path" to ":networking")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(libs.ktor.client.core)
                 implementation(libs.kotlinx.serialization.json)
@@ -48,6 +50,7 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.cio)
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.kotlinx.serialization.json)

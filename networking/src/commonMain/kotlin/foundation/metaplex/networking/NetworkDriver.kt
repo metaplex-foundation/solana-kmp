@@ -1,4 +1,4 @@
-package foundation.metaplex.ktorDriver
+package foundation.metaplex.networking
 
 import com.funkatronics.networking.HttpNetworkDriver
 import com.funkatronics.networking.HttpRequest
@@ -8,7 +8,7 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
 
-class KTorDriver(private val httpClient: HttpClient) : HttpNetworkDriver {
+class NetworkDriver(private val httpClient: HttpClient = NetworkClient()) : HttpNetworkDriver {
     override suspend fun makeHttpRequest(request: HttpRequest): String {
         val response = httpClient.request(request.url) {
             request.properties.forEach { (key, value) ->

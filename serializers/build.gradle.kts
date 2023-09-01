@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.maven.publish)
     kotlin("plugin.serialization") version "1.9.0"
 }
 
@@ -29,7 +28,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "SolanaInterfaces"
+            baseName = "Serializers"
             xcf.add(this)
         }
     }
@@ -37,29 +36,20 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation(project(mapOf("path" to ":amount")))
+                implementation(project(mapOf("path" to ":solanainterfaces")))
                 implementation(libs.kotlinx.serialization.json )
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kborsh)
-                implementation(libs.crypto)
-                implementation(libs.bignum)
-                implementation(libs.rpccore)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.kotlinx.coroutines.test)
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
     }
 }
 
 android {
-    namespace = "foundation.metaplex.solanainterfaces"
+    namespace = "com.metaplex.serializers"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -68,8 +58,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-}
-
-mavenPublishing {
-    coordinates(group as String, "solanainterfaces", version as String)
 }
