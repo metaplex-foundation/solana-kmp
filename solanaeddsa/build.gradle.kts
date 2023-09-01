@@ -68,7 +68,7 @@ android {
 }
 
 mavenPublishing {
-    coordinates("foundation.metaplex", "solanaeddsa", "0.1.0")
+    coordinates("foundation.metaplex", "solanaeddsa", "0.1.1")
 }
 
 publishing {
