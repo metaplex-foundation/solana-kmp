@@ -38,7 +38,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(mapOf("path" to ":solanapublickeys")))
+                implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(libs.ktor.client.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.coroutines.core)

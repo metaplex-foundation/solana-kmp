@@ -37,7 +37,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
-                api(project(mapOf("path" to ":base58")))
+                implementation(project(mapOf("path" to ":base58")))
                 implementation(libs.buffer)
                 implementation(libs.crypto)
             }
