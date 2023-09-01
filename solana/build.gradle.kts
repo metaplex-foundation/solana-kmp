@@ -37,10 +37,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(mapOf("path" to ":solanaeddsa")))
-                api(project(mapOf("path" to ":solanakeypair")))
-                api(project(mapOf("path" to ":solanapublickeys")))
                 api(project(mapOf("path" to ":solanainterfaces")))
-                api(project(mapOf("path" to ":base58")))
                 implementation(libs.buffer)
                 implementation(libs.kotlinx.coroutines.core)
             }
