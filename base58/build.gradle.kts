@@ -63,7 +63,7 @@ android {
 }
 
 mavenPublishing {
-    coordinates("foundation.metaplex", "base58", "0.1.0")
+    coordinates(group as String, "base58", version as String)
 }
 
 publishing {

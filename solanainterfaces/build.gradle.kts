@@ -64,7 +64,7 @@ android {
 }
 
 mavenPublishing {
-    coordinates("foundation.metaplex", "solanainterfaces", "0.1.0")
+    coordinates(group as String, "solanainterfaces", version as String)
 }
 
 publishing {
