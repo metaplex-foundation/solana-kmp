@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-val cryptoVersion = "0.1.4"
-
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
     targetHierarchy.default()
@@ -39,7 +37,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
-                api(project(mapOf("path" to ":solanapublickeys")))
                 api(project(mapOf("path" to ":solanainterfaces")))
                 api(project(mapOf("path" to ":solanakeypair")))
                 implementation(libs.crypto)
