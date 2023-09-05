@@ -1,4 +1,4 @@
-package foundation.metaplex.solanainterfaces.serializers
+package foundation.metaplex.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

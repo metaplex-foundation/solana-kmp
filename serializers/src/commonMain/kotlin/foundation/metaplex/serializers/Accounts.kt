@@ -1,10 +1,6 @@
-package foundation.metaplex.solanainterfaces
+package foundation.metaplex.serializers
 
 import foundation.metaplex.amount.SolAmount
-import foundation.metaplex.solanainterfaces.serializers.AnchorAccountSerializer
-import foundation.metaplex.solanainterfaces.serializers.PublicKeyAsStringSerializer
-import foundation.metaplex.solanainterfaces.serializers.SolAmountSerializer
-import foundation.metaplex.solanainterfaces.serializers.SolanaResponseSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

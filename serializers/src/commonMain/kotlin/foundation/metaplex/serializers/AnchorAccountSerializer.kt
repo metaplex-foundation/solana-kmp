@@ -1,4 +1,4 @@
-package foundation.metaplex.solanainterfaces.serializers
+package foundation.metaplex.serializers
 
 import diglol.crypto.Hash
 import kotlinx.coroutines.runBlocking

@@ -41,6 +41,7 @@ kotlin {
                 implementation(project(mapOf("path" to ":solanainterfaces")))
                 implementation(project(mapOf("path" to ":networking")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
+                implementation(project(mapOf("path" to ":serializers")))
                 implementation(libs.ktor.client.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.coroutines.core)

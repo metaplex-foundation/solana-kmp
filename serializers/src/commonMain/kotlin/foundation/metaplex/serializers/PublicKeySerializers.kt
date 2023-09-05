@@ -5,7 +5,7 @@
  * Created by Funkatronics on 7/20/2022
  */
 
-package foundation.metaplex.solanainterfaces.serializers
+package foundation.metaplex.serializers
 
 import com.funkatronics.kborsh.BorshDecoder
 import com.funkatronics.kborsh.BorshEncoder

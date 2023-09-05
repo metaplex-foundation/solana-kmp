@@ -1,7 +1,6 @@
-package foundation.metaplex.solanainterfaces
+package foundation.metaplex.serializers
 
 import com.funkatronics.kborsh.Borsh
-import foundation.metaplex.solanainterfaces.serializers.PublicKeyAs32ByteSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable

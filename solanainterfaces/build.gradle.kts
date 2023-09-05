@@ -39,12 +39,6 @@ kotlin {
             dependencies {
                 implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(project(mapOf("path" to ":amount")))
-                implementation(libs.kotlinx.serialization.json )
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kborsh)
-                implementation(libs.crypto)
-                implementation(libs.bignum)
-                implementation(libs.rpccore)
             }
         }
         val commonTest by getting {

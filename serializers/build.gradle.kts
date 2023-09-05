@@ -36,13 +36,19 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solanainterfaces")))
+                implementation(project(mapOf("path" to ":solanapublickeys")))
+                implementation(project(mapOf("path" to ":amount")))
                 implementation(libs.kotlinx.serialization.json )
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.bignum)
+                implementation(libs.crypto)
+                implementation(libs.kborsh)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
     }

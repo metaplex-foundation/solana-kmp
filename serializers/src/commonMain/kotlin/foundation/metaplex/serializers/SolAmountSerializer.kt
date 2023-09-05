@@ -1,11 +1,9 @@
-package foundation.metaplex.solanainterfaces.serializers
+package foundation.metaplex.serializers
 
 import com.funkatronics.kborsh.BorshDecoder
 import com.funkatronics.kborsh.BorshEncoder
-import diglol.crypto.internal.toByteArray
 import foundation.metaplex.amount.SolAmount
 import foundation.metaplex.amount.lamports
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ByteArraySerializer
 import kotlinx.serialization.builtins.serializer
