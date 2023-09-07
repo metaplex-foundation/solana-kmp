@@ -1,5 +1,6 @@
-package foundation.metaplex.solanainterfaces
+package foundation.metaplex.solana.transactions
 
+import com.metaplex.signer.Signer
 import foundation.metaplex.solanapublickeys.PublicKey
 
 /**

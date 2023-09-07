@@ -1,24 +1,12 @@
-package foundation.metaplex.solana
+package foundation.metaplex.solana.transactions
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
+import com.metaplex.signer.Signer
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
+import foundation.metaplex.solana.util.Shortvec
 import foundation.metaplex.solanaeddsa.SolanaEddsa
-import foundation.metaplex.solanainterfaces.AccountMeta
-import foundation.metaplex.solanainterfaces.CompiledInstruction
-import foundation.metaplex.solanainterfaces.DEFAULT_SIGNATURE
-import foundation.metaplex.solanainterfaces.Message
-import foundation.metaplex.solanainterfaces.MessageHeader
-import foundation.metaplex.solanainterfaces.NonceInformation
-import foundation.metaplex.solanainterfaces.SerializeConfig
-import foundation.metaplex.solanainterfaces.SerializedTransaction
-import foundation.metaplex.solanainterfaces.SerializedTransactionMessage
-import foundation.metaplex.solanainterfaces.SignaturePubkeyPair
-import foundation.metaplex.solanainterfaces.Signer
-import foundation.metaplex.solanainterfaces.Transaction
-import foundation.metaplex.solanainterfaces.TransactionInstruction
-import foundation.metaplex.solanainterfaces.TransactionSignature
 import foundation.metaplex.solanapublickeys.PublicKey
 
 /**

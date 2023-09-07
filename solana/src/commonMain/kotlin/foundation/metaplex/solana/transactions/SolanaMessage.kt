@@ -1,12 +1,10 @@
-package foundation.metaplex.solana
+package foundation.metaplex.solana.transactions
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
-import foundation.metaplex.solanainterfaces.CompiledInstruction
-import foundation.metaplex.solanainterfaces.Message
-import foundation.metaplex.solanainterfaces.MessageHeader
+import foundation.metaplex.solana.util.Shortvec
 import foundation.metaplex.solanapublickeys.PUBLIC_KEY_LENGTH
 import foundation.metaplex.solanapublickeys.PublicKey
 

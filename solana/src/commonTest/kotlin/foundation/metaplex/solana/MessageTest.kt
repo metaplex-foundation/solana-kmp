@@ -1,13 +1,14 @@
 package foundation.metaplex.solana
 
+import com.metaplex.signer.Signer
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.solanaeddsa.SolanaEddsa
 import foundation.metaplex.solana.MemoProgram.writeUtf8
-import foundation.metaplex.solanainterfaces.AccountMeta
-import foundation.metaplex.solanainterfaces.Signer
-import foundation.metaplex.solanainterfaces.Transaction
-import foundation.metaplex.solanainterfaces.TransactionInstruction
-import foundation.metaplex.solanakeypair.SolanaKeypair
+import foundation.metaplex.solana.transactions.AccountMeta
+import foundation.metaplex.solana.transactions.SolanaTransactionBuilder
+import foundation.metaplex.solana.transactions.Transaction
+import foundation.metaplex.solana.transactions.TransactionInstruction
+import foundation.metaplex.solanaeddsa.Keypair
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.io.encoding.Base64
@@ -70,21 +71,14 @@ class MessageTest {
 
 }
 
-class HotSigner(private val keyPair: SolanaKeypair) : Signer {
+class SolanaKeypair(
+    override val publicKey: PublicKey,
+    override val secretKey: ByteArray
+) : Keypair
+
+class HotSigner(private val keyPair: Keypair) : Signer {
     override val publicKey: PublicKey = keyPair.publicKey
     override suspend fun signMessage(message: ByteArray): ByteArray = SolanaEddsa.sign(message, keyPair)
-
-    override suspend fun signTransaction(transaction: Transaction): Transaction {
-        transaction.sign(this)
-        return transaction
-    }
-
-    override suspend fun signAllTransactions(transactions: Array<Transaction>): Array<Transaction> {
-        for (transaction in transactions){
-            signTransaction(transaction)
-        }
-        return transactions
-    }
 }
 
 object MemoProgram {

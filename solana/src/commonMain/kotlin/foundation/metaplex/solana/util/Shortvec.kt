@@ -1,4 +1,4 @@
-package foundation.metaplex.solana
+package foundation.metaplex.solana.util
 
 object Shortvec {
     fun decodeLength(bytes: ByteArray): Pair<Int, ByteArray> {

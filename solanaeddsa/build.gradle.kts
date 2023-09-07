@@ -36,9 +36,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
-                implementation(project(mapOf("path" to ":solanainterfaces")))
-                implementation(project(mapOf("path" to ":solanakeypair")))
+                implementation(project(mapOf("path" to ":signer")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(libs.crypto)
             }

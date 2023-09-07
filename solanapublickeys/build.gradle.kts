@@ -36,7 +36,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
                 implementation(project(mapOf("path" to ":base58")))
                 implementation(libs.buffer)
                 implementation(libs.crypto)
