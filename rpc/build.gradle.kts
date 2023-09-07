@@ -18,7 +18,6 @@ kotlin {
             }
         }
     }
-
     jvm()
 
     val xcf = XCFramework()
@@ -30,7 +29,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "MetaplexReadApi"
+            baseName = "RPC"
             xcf.add(this)
         }
     }
@@ -38,31 +37,33 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solanainterfaces")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation(project(mapOf("path" to ":rpc")))
-                implementation(libs.ktor.client.core)
-                implementation(libs.kotlinx.serialization.json)
+                implementation(project(mapOf("path" to ":amount")))
+                implementation(libs.kotlinx.serialization.json )
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.bignum)
+                implementation(libs.crypto)
+                implementation(libs.kborsh)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.cio)
                 implementation(libs.rpccore)
+                implementation(libs.buffer)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.cio)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.kotlinx.serialization.json)
             }
         }
+
         val jvmMain by getting
         val jvmTest by getting
     }
 }
 
 android {
-    namespace = "foundation.metaplex.readapi"
+    namespace = "com.metaplex.rpc"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -74,5 +75,5 @@ android {
 }
 
 mavenPublishing {
-    coordinates(group as String, "readapi", version as String)
+    coordinates(group as String, "rpc", version as String)
 }

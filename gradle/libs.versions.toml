@@ -6,6 +6,7 @@ ktor = "2.3.3"
 serialization = "1.6.0-RC"
 kotlinxCoroutines= "1.7.3"
 rpccore = "0.2.0"
+kborsh = "0.1.0"
 
 # Plugin versions
 androidGradlePlugin = "8.0.2"
@@ -24,8 +25,10 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 
 rpccore = { group = "io.github.funkatronics", name = "rpccore", version.ref = "rpccore" }
+kborsh = { group = "io.github.funkatronics", name = "kborsh", version.ref = "kborsh" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
