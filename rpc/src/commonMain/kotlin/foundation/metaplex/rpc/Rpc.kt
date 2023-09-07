@@ -53,7 +53,7 @@ class RPC(
      */
     override suspend fun <T>getAccountInfo(
         publicKey: PublicKey,
-        configuration: RpcGetAccountInfoConfigurationRpcInput?,
+        configuration: RpcGetAccountInfoConfiguration?,
         serializer: KSerializer<T>,
     ): Account<T>? {
         // Create a list to hold JSON elements for RPC request parameters
@@ -61,8 +61,8 @@ class RPC(
         params.add(json.encodeToJsonElement(publicKey.toBase58()))
 
         // Use the provided configuration or create a default one
-        val fixedConfiguration = configuration ?: RpcGetAccountInfoConfigurationRpcInput()
-        params.add(json.encodeToJsonElement(RpcGetAccountInfoConfigurationRpcInput.serializer(), fixedConfiguration))
+        val fixedConfiguration = configuration ?: RpcGetAccountInfoConfiguration()
+        params.add(json.encodeToJsonElement(RpcGetAccountInfoConfiguration.serializer(), fixedConfiguration))
 
         // Create an RPC request object with a unique ID
         val rpcRequest = JsonRpc20Request(

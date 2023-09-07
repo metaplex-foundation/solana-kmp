@@ -19,7 +19,7 @@ interface RpcInterface {
      */
     suspend fun <T> getAccountInfo(
         publicKey: PublicKey,
-        configuration: RpcGetAccountInfoConfigurationRpcInput?,
+        configuration: RpcGetAccountInfoConfiguration?,
         serializer: KSerializer<T>,
     ): Account<T>?
 }
@@ -28,7 +28,7 @@ interface RpcInterface {
  * Configuration input for the [RpcInterface.getAccountInfo] function.
  */
 @Serializable
-data class RpcGetAccountInfoConfigurationRpcInput(
+data class RpcGetAccountInfoConfiguration(
     val encoding: Encoding = Encoding.base64,
     val commitment: Commitment? = null,
     val minContextSlot: UInt? = null,

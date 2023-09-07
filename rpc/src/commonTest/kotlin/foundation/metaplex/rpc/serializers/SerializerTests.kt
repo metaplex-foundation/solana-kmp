@@ -2,10 +2,8 @@ package foundation.metaplex.rpc.serializers
 
 import com.funkatronics.kborsh.Borsh
 import com.funkatronics.rpccore.Rpc20Response
-import com.funkatronics.rpccore.RpcResponse
 import foundation.metaplex.rpc.AccountInfoSerializer
-import foundation.metaplex.rpc.RpcGetAccountInfoConfigurationRpcInput
-import foundation.metaplex.rpc.SolanaAccountSerializer
+import foundation.metaplex.rpc.RpcGetAccountInfoConfiguration
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable
@@ -123,8 +121,8 @@ class SerializerTests {
             PublicKey("9VHphpWFmUxVHxzWyeYJYYbQADWZ7X6PLzyWER8Lc3k2").toBase58()
         ))
         params.add(json.encodeToJsonElement(
-            RpcGetAccountInfoConfigurationRpcInput.serializer(),
-            RpcGetAccountInfoConfigurationRpcInput()
+            RpcGetAccountInfoConfiguration.serializer(),
+            RpcGetAccountInfoConfiguration()
         ))
 
         assertNotNull(params)
