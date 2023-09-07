@@ -1,6 +1,5 @@
 package foundation.metaplex.rpc
 
-import foundation.metaplex.rpc.networking.NetworkDriver
 import foundation.metaplex.rpc.serializers.BorshAsBase64JsonArraySerializer
 import foundation.metaplex.rpc.serializers.Key
 import foundation.metaplex.rpc.serializers.Metadata

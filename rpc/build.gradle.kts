@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
     kotlin("plugin.serialization") version "1.9.0"
 }
 
@@ -55,6 +56,9 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.test)
             }
         }
+
+        val jvmMain by getting
+        val jvmTest by getting
     }
 }
 
@@ -68,4 +72,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+mavenPublishing {
+    coordinates(group as String, "rpc", version as String)
 }
