@@ -1,6 +1,6 @@
 package foundation.metaplex.readapi
 
-import foundation.metaplex.serializers.PublicKeyAsStringSerializer
+import foundation.metaplex.rpc.serializers.PublicKeyAsStringSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.Serializable
 

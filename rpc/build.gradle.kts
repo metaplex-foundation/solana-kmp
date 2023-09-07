@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
-    alias(libs.plugins.maven.publish)
     kotlin("plugin.serialization") version "1.9.0"
 }
 
@@ -18,7 +17,6 @@ kotlin {
             }
         }
     }
-
     jvm()
 
     val xcf = XCFramework()
@@ -30,7 +28,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "MetaplexReadApi"
+            baseName = "RPC"
             xcf.add(this)
         }
     }
@@ -38,31 +36,30 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(mapOf("path" to ":solanainterfaces")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation(project(mapOf("path" to ":rpc")))
-                implementation(libs.ktor.client.core)
-                implementation(libs.kotlinx.serialization.json)
+                implementation(project(mapOf("path" to ":amount")))
+                implementation(libs.kotlinx.serialization.json )
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.bignum)
+                implementation(libs.crypto)
+                implementation(libs.kborsh)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.cio)
                 implementation(libs.rpccore)
+                implementation(libs.buffer)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.cio)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.kotlinx.serialization.json)
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
     }
 }
 
 android {
-    namespace = "foundation.metaplex.readapi"
+    namespace = "com.metaplex.rpc"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -71,8 +68,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-}
-
-mavenPublishing {
-    coordinates(group as String, "readapi", version as String)
 }

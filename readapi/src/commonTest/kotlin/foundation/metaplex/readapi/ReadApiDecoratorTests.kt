@@ -1,6 +1,6 @@
 package foundation.metaplex.readapi
 
-import foundation.metaplex.networking.NetworkDriver
+import foundation.metaplex.rpc.networking.NetworkDriver
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
