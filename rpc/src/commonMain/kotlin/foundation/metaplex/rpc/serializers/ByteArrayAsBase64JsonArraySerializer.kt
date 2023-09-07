@@ -11,7 +11,7 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
- * (De)Serializes any array of bytes as a Base64 encoded string, formatted as Json string array:
+ * This object provides a serializer for encoding and decoding byte arrays as Base64-encoded JSON arrays.
  * output = {
  *      [
  *          "theBase64EncodedString",
@@ -23,6 +23,12 @@ object ByteArrayAsBase64JsonArraySerializer: KSerializer<ByteArray> {
     private val delegateSerializer = ListSerializer(String.serializer())
     override val descriptor: SerialDescriptor = delegateSerializer.descriptor
 
+    /**
+     * Serializes the provided byte array into a Base64-encoded JSON array representation.
+     *
+     * @param encoder The encoder used for serialization.
+     * @param value The byte array to be serialized.
+     */
     @OptIn(ExperimentalEncodingApi::class)
     override fun serialize(encoder: Encoder, value: ByteArray) =
         encoder.encodeSerializableValue(
@@ -30,6 +36,13 @@ object ByteArrayAsBase64JsonArraySerializer: KSerializer<ByteArray> {
                 Base64.encode(value), "base64"
             ))
 
+    /**
+     * Deserializes a Base64-encoded JSON array representation into a byte array.
+     *
+     * @param decoder The decoder used for deserialization.
+     * @return The deserialized byte array.
+     * @throws SerializationException if the input is not a valid Base64-encoded JSON array.
+     */
     @OptIn(ExperimentalEncodingApi::class)
     override fun deserialize(decoder: Decoder): ByteArray {
         decoder.decodeSerializableValue(delegateSerializer).apply {

@@ -22,5 +22,4 @@ object SolAmountSerializer : KSerializer<SolAmount> {
     override fun deserialize(decoder: Decoder): SolAmount =
         if (decoder is BorshDecoder) lamports( decoder.decodeLong())
         else lamports(decoder.decodeSerializableValue(Long.serializer()))
-
 }

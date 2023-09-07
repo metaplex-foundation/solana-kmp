@@ -51,7 +51,7 @@ class RPC(
      * )
      * ```
      */
-    override suspend fun <T>getAccountInfo(
+    override suspend fun <T> getAccountInfo(
         publicKey: PublicKey,
         configuration: RpcGetAccountInfoConfiguration?,
         serializer: KSerializer<T>,
