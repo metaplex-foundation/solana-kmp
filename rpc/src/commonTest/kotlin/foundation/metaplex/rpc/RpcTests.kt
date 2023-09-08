@@ -29,6 +29,30 @@ class RpcTests {
     }
 
     @Test
+    fun testActualGetMultipleAccounts() = runTest {
+        val randomPublicKeys = listOf(
+            PublicKey("9VHphpWFmUxVHxzWyeYJYYbQADWZ7X6PLzyWER8Lc3k2"),
+            PublicKey("9VHphpWFmUxVHxzWyeYJYYbQADWZ7X6PLzyWER8Lc3k2")
+        )
+        val rpc = RPC(rpcUrl)
+        val metadatas = rpc.getMultipleAccounts(
+            randomPublicKeys,
+            null,
+            serializer = BorshAsBase64JsonArraySerializer(Metadata.serializer())
+        )!!
+        assertEquals(metadatas.size, 2)
+        val first = metadatas[0]!!.data
+        assertNotNull(first)
+        assertEquals(first.key, Key.MetadataV1)
+        assertEquals(first.data.name, "Gooberg #2235")
+
+        val second = metadatas[1]!!.data
+        assertNotNull(second)
+        assertEquals(second.key, Key.MetadataV1)
+        assertEquals(second.data.name, "Gooberg #2235")
+    }
+
+    @Test
     fun testActualGetLatestBlockhash() = runTest {
         val rpc = RPC(rpcUrl)
         val blockhash = rpc.getLatestBlockhash(null)
