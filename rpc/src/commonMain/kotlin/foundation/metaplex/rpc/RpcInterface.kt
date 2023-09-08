@@ -2,7 +2,9 @@ package foundation.metaplex.rpc
 
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 /**
  * Represents an interface for making remote procedure calls (RPC).
@@ -22,6 +24,26 @@ interface RpcInterface {
         configuration: RpcGetAccountInfoConfiguration?,
         serializer: KSerializer<T>,
     ): Account<T>?
+
+
+    /**
+     * Retrieves information for multiple accounts using their public keys.
+     *
+     * This function is a part of the RpcInterface and is used to fetch the information of multiple accounts from the blockchain in a single RPC call. The accounts are specified using a list of their public keys.
+     *
+     * @param publicKeys A list of [PublicKey] objects representing the public keys of the accounts whose information needs to be fetched.
+     * @param configuration An optional configuration object of type [RpcGetMultipleAccountsConfiguration] that can be used to specify various options for the RPC request such as encoding format, commitment level, minimum context slot, and data slice. Defaults to Base64 encoding if not specified.
+     * @param serializer A [KSerializer] object to deserialize the response into an appropriate data type.
+     *
+     * @return A list of [Account] objects containing the information of the accounts, or null if not found. The list can contain null elements if information for some accounts could not be retrieved.
+     *
+     * @throws SomeKindOfException (replace with actual exception class) if the RPC call fails for reasons such as network issues, incorrect inputs, etc.
+     */
+    suspend fun <T> getMultipleAccounts(
+        publicKeys: List<PublicKey>,
+        configuration: RpcGetMultipleAccountsConfiguration?,
+        serializer: KSerializer<T>,
+    ): List<Account<T>?>?
 
     /**
      * Fetch the latest blockhash.
@@ -97,6 +119,14 @@ data class RpcSendTransactionConfiguration(
 ): RpcBaseOptions
 
 @Serializable
+data class RpcGetMultipleAccountsConfiguration(
+    override val encoding: Encoding = Encoding.base64,
+    override val commitment: Commitment? = null,
+    override val minContextSlot: ULong? = null,
+    val dataSlice: RpcDataSlice? = null
+): RpcBaseOptions
+
+@Serializable
 data class RpcGetLatestBlockhashConfiguration(
     override val encoding: Encoding? = null,
     override val commitment: Commitment? = null,
@@ -148,7 +178,11 @@ data class RpcDataFilterMemcmp(val memcmp: Memcmp) : RpcDataFilter()
  */
 @Serializable
 enum class Encoding {
-    base64
+    base64,
+    jsonParsed,
+    base58,
+    @SerialName("base64+zstd")
+    base64_zstd
 }
 
 /**

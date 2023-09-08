@@ -5,10 +5,12 @@ import com.funkatronics.networking.Rpc20Driver
 import com.funkatronics.rpccore.JsonRpc20Request
 import com.funkatronics.rpccore.get
 import foundation.metaplex.rpc.networking.NetworkDriver
+import foundation.metaplex.rpc.serializers.BorshAsBase64JsonArraySerializer
 import foundation.metaplex.rpc.serializers.SolanaResponseSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -78,6 +80,65 @@ class RPC(
 
         // Execute the RPC request and deserialize the response using the provided serializer
         return rpcDriver.get(rpcRequest, AccountInfoSerializer(serializer)).getOrThrow()
+    }
+
+    /**
+     * Retrieves the account information for multiple public keys.
+     *
+     * This function allows you to query the account information for multiple accounts
+     * in a single request, potentially optimizing network use and reducing latency compared
+     * to making separate requests for each account.
+     *
+     * @param publicKeys A list of public keys of the accounts for which information is requested.
+     * @param configuration Optional configuration for the RPC request. This allows the caller
+     *                      to specify details such as the encoding format to be used and
+     *                      the commitment level to apply when retrieving the data.
+     *                      Defaults to {@link RpcGetMultipleAccountsConfiguration} with base64 encoding
+     *                      and default commitment and context slot values if not provided.
+     * @param serializer The serializer to be used for deserializing the response into a list
+     *                   of [Account] objects.
+     * @return A list of [Account] objects representing the account information for each
+     *         public key in the `publicKeys` parameter. Each element in the list corresponds
+     *         to a public key in the `publicKeys` parameter, and can be null if the account
+     *         information for a given public key could not be found.
+     *
+     * Example usage:
+     * ```
+     * val accountInfos = rpcInterface.getMultipleAccounts(
+     *     listOf(publicKey1, publicKey2),
+     *     RpcGetMultipleAccountsConfiguration(encoding = Encoding.jsonParsed),
+     *     Account.serializer()
+     * )
+     * ```
+     */
+    override suspend fun <T> getMultipleAccounts(
+        publicKeys: List<PublicKey>,
+        configuration: RpcGetMultipleAccountsConfiguration?,
+        serializer: KSerializer<T>
+    ): List<Account<T>?>? {
+        val params: MutableList<JsonElement> = mutableListOf()
+        params.add(json.encodeToJsonElement(publicKeys.map { it.toBase58() }))
+
+        val fixedConfiguration = configuration ?: RpcGetMultipleAccountsConfiguration()
+        params.add(json.encodeToJsonElement(RpcGetMultipleAccountsConfiguration.serializer(), fixedConfiguration))
+
+        // Create an RPC request object with a unique ID
+        val rpcRequest = JsonRpc20Request(
+            "getMultipleAccounts",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        return rpcDriver.get(rpcRequest,
+            SolanaResponseSerializer(
+                ListSerializer(
+                    Account.serializer(
+                        serializer
+                    )
+                )
+            )
+        ).getOrThrow()
     }
 
 
