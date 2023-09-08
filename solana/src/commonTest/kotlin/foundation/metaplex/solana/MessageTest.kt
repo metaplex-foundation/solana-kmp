@@ -2,6 +2,7 @@ package foundation.metaplex.solana
 
 import com.metaplex.signer.Signer
 import foundation.metaplex.base58.decodeBase58
+import foundation.metaplex.rpc.RPC
 import foundation.metaplex.solanaeddsa.SolanaEddsa
 import foundation.metaplex.solana.MemoProgram.writeUtf8
 import foundation.metaplex.solana.transactions.AccountMeta
@@ -16,6 +17,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
 
 class MessageTest {
 
@@ -58,6 +60,28 @@ class MessageTest {
             "AV6w4Af9PSHhNsTSal4vlPF7Su9QXgCVyfDChHImJITLcS5BlNotKFeMoGw87VwjS3eNA2JCL+MEoReynCNbWAoBAAECBhrZ0FOHFUhTft4+JhhJo9+3/QL6vHWyI8jkatuFPQwFSlNQ+F3IgtYUpVZyeIopbd8eq6vQpgZ4iEky9O72oMviiMGZlPAy5mIJT92z865aQ2ipBrulSCScEzmEJkX1AQEBAAlUZXN0IG1lbW8=",
             Base64.encode(transaction.serialize())
         )
+    }
+
+    @Test
+    fun testTransactionSend() = runTest {
+        val rpcUrl = "https://api.devnet.solana.com/"
+        val rpc = RPC(rpcUrl)
+        val blockhash = rpc.getLatestBlockhash(null)
+        val memo = "Other Test memo"
+        val transaction: Transaction = SolanaTransactionBuilder()
+            .addInstruction(
+                writeUtf8(
+                    signer().publicKey,
+                    memo
+                )
+            )
+            .setRecentBlockHash(blockhash.blockhash)
+            .setSigners(listOf(signer()))
+            .build()
+
+        val serializedTransaction = transaction.serialize()
+        val transactionSignature = rpc.sendTransaction(serializedTransaction, null)
+        assertNotNull(transactionSignature)
     }
 
     companion object {

@@ -37,6 +37,7 @@ class NetworkDriver(private val httpClient: HttpClient = NetworkClient()) : Http
             // Removes a specific portion from the request body if present. RPCs complain about it
             setBody(request.body?.replace("\"type\":\"com.funkatronics.rpccore.JsonRpc20Request\",", ""))
         }
+        println(response.bodyAsText())
         return response.bodyAsText()
     }
 }
