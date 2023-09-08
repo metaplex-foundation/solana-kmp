@@ -7,7 +7,9 @@ import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class RpcTests {
     private var rpcUrl: String = "https://api.mainnet-beta.solana.com"
@@ -24,5 +26,14 @@ class RpcTests {
         assertNotNull(metadata)
         assertEquals(metadata.key, Key.MetadataV1)
         assertEquals(metadata.data.name, "Gooberg #2235")
+    }
+
+    @Test
+    fun testActualGetLatestBlockhash() = runTest {
+        val rpc = RPC(rpcUrl)
+        val blockhash = rpc.getLatestBlockhash(null)
+        assertNotNull(blockhash)
+        assertNotEquals(blockhash.blockhash, "")
+        assertTrue { blockhash.lastValidBlockHeight > 0u }
     }
 }

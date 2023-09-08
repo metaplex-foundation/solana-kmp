@@ -46,7 +46,7 @@ kotlin {
                 implementation(libs.kborsh)
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.cio)
-                implementation(libs.rpccore)
+                api(libs.rpccore)
                 implementation(libs.buffer)
             }
         }

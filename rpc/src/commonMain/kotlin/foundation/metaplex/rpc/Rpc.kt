@@ -5,13 +5,17 @@ import com.funkatronics.networking.Rpc20Driver
 import com.funkatronics.rpccore.JsonRpc20Request
 import com.funkatronics.rpccore.get
 import foundation.metaplex.rpc.networking.NetworkDriver
+import foundation.metaplex.rpc.serializers.SolanaResponseSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.encodeToJsonElement
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.random.Random
 import kotlin.random.nextUInt
 
@@ -74,5 +78,91 @@ class RPC(
 
         // Execute the RPC request and deserialize the response using the provided serializer
         return rpcDriver.get(rpcRequest, AccountInfoSerializer(serializer)).getOrThrow()
+    }
+
+
+    /**
+     * Sends a serialized transaction to the Solana blockchain.
+     *
+     * @param transaction The serialized transaction to be sent.
+     * @param configuration An optional configuration to customize how the transaction is sent.
+     *                     Defaults to an instance of {@link RpcSendTransactionConfiguration} with default values
+     *                     if not provided.
+     * @return The signature of the successfully submitted transaction.
+     *
+     * @throws Exception If there is any error during the RPC request or the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val signature = sendTransaction(
+     *     serializedTransaction,
+     *     RpcSendTransactionConfiguration(skipPreflight = true)
+     * )
+     * ```
+     */
+    @OptIn(ExperimentalEncodingApi::class)
+    override suspend fun sendTransaction(
+        transaction: SerializedTransaction,
+        configuration: RpcSendTransactionConfiguration?
+    ): TransactionSignature {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+        params.add(json.encodeToJsonElement(Base64.encode(transaction)))
+
+        // Use the provided configuration or create a default one
+        val fixedConfiguration = configuration ?: RpcSendTransactionConfiguration()
+        params.add(json.encodeToJsonElement(RpcSendTransactionConfiguration.serializer(), fixedConfiguration))
+
+        val rpcRequest = JsonRpc20Request(
+            "sendTransaction",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        val response = rpcDriver.get(
+            rpcRequest, String.serializer()
+        ).getOrThrow()!!
+        return response.encodeToByteArray()
+    }
+
+    /**
+     * Retrieves the latest blockhash from the Solana blockchain, along with the associated expiry block height.
+     *
+     * @param configuration An optional configuration to customize the RPC request.
+     *                     Defaults to null, indicating the default configuration will be used.
+     * @return An object containing the latest blockhash and its associated expiry block height.
+     *
+     * @throws Exception If there is any error during the RPC request or the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val blockInfo = getLatestBlockhash(
+     *     RpcGetLatestBlockhashConfiguration(commitment = Commitment.Finalized)
+     * )
+     * ```
+     */
+    override suspend fun getLatestBlockhash(
+        configuration: RpcGetLatestBlockhashConfiguration?
+    ): BlockhashWithExpiryBlockHeight {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+
+        // Use the provided configuration or create a default one
+        configuration?.let {
+            params.add(json.encodeToJsonElement(RpcGetLatestBlockhashConfiguration.serializer(), it))
+        }
+        val rpcRequest = JsonRpc20Request(
+            "getLatestBlockhash",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        return rpcDriver.get(
+            rpcRequest, SolanaResponseSerializer(BlockhashWithExpiryBlockHeight.serializer())
+        ).getOrThrow()!!
     }
 }
