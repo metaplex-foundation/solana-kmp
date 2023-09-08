@@ -1,4 +1,4 @@
-package foundation.metaplex.solanainterfaces
+package foundation.metaplex.rpc
 
 
 /**

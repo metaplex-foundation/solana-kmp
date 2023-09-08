@@ -36,10 +36,12 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                api(project(mapOf("path" to ":amount")))
                 api(project(mapOf("path" to ":base58")))
+                api(project(mapOf("path" to ":readapi")))
+                api(project(mapOf("path" to ":rpc")))
+                api(project(mapOf("path" to ":signer")))
                 api(project(mapOf("path" to ":solanaeddsa")))
-                api(project(mapOf("path" to ":solanainterfaces")))
-                api(project(mapOf("path" to ":solanakeypair")))
                 api(project(mapOf("path" to ":solanapublickeys")))
                 implementation(libs.buffer)
                 implementation(libs.kotlinx.coroutines.core)

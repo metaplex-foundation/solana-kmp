@@ -1,4 +1,6 @@
-package foundation.metaplex.solanainterfaces
+package foundation.metaplex.solana.transactions
+
+import com.metaplex.signer.Signer
 
 
 /**
