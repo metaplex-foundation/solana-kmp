@@ -5,7 +5,6 @@ import com.funkatronics.networking.Rpc20Driver
 import com.funkatronics.rpccore.JsonRpc20Request
 import com.funkatronics.rpccore.get
 import foundation.metaplex.rpc.networking.NetworkDriver
-import foundation.metaplex.rpc.serializers.BorshAsBase64JsonArraySerializer
 import foundation.metaplex.rpc.serializers.SolanaResponseSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -130,6 +129,67 @@ class RPC(
         )
         val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
 
+        return rpcDriver.get(rpcRequest,
+            SolanaResponseSerializer(
+                ListSerializer(
+                    Account.serializer(
+                        serializer
+                    )
+                )
+            )
+        ).getOrThrow()
+    }
+
+    /**
+     * Retrieves a list of all accounts associated with the specified program ID from the Solana blockchain.
+     *
+     * This method allows for fetching all accounts associated with a particular program ID, which might include
+     * various types of information such as account balances, associated data, etc. This method can be particularly
+     * useful in scenarios where you need to retrieve a snapshot of all accounts linked to a specific program at a given
+     * point in time.
+     *
+     * @param programId The public key of the program ID for which to fetch the associated accounts.
+     * @param configuration Optional configuration for the RPC request, allowing to set additional parameters for
+     *                      the request such as filters. If not provided, a default configuration is used.
+     * @param serializer The Kotlin Serialization serializer to be used to deserialize the response into a list of
+     *                   [Account] objects, allowing to work with the response in a type-safe manner.
+     * @return A list of [Account] objects representing the information of each account associated with the specified
+     *         program ID. Each element in the list represents an account, and can be null if the information for a
+     *         particular account could not be retrieved.
+     *
+     * @throws Exception If there is an error during the RPC request or during the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val programAccounts = rpc.getProgramAccounts(
+     *     programId,
+     *     RpcGetProgramAccountsConfiguration(filters = listOf(...)),
+     *     MyAccountSerializer()
+     * )
+     * ```
+     */
+    override suspend fun <T> getProgramAccounts(
+        programId: PublicKey,
+        configuration: RpcGetProgramAccountsConfiguration?,
+        serializer: KSerializer<T>
+    ): List<Account<T>?>? {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+        params.add(json.encodeToJsonElement(programId.toBase58()))
+
+        // Use the provided configuration or create a default one
+        val fixedConfiguration = configuration ?: RpcGetProgramAccountsConfiguration()
+        params.add(json.encodeToJsonElement(RpcGetProgramAccountsConfiguration.serializer(), fixedConfiguration))
+
+        // Create an RPC request object with a unique ID
+        val rpcRequest = JsonRpc20Request(
+            "getProgramAccounts",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
         return rpcDriver.get(rpcRequest,
             SolanaResponseSerializer(
                 ListSerializer(

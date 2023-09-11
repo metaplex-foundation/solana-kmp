@@ -4,7 +4,6 @@ import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
 
 /**
  * Represents an interface for making remote procedure calls (RPC).
@@ -37,12 +36,31 @@ interface RpcInterface {
      *
      * @return A list of [Account] objects containing the information of the accounts, or null if not found. The list can contain null elements if information for some accounts could not be retrieved.
      *
-     * @throws SomeKindOfException (replace with actual exception class) if the RPC call fails for reasons such as network issues, incorrect inputs, etc.
+     * @throws Exception if the RPC call fails for reasons such as network issues, incorrect inputs, etc.
      */
     suspend fun <T> getMultipleAccounts(
         publicKeys: List<PublicKey>,
         configuration: RpcGetMultipleAccountsConfiguration?,
         serializer: KSerializer<T>,
+    ): List<Account<T>?>?
+
+    /**
+     * Retrieves all accounts associated with a specific program ID.
+     *
+     * This method facilitates the fetching of all accounts that are associated with a given program ID. It performs an RPC (Remote Procedure Call) to retrieve a list of accounts, leveraging the specified serializer to handle the deserialization of the account data.
+     *
+     * @param programId The [PublicKey] representing the ID of the program whose accounts need to be fetched.
+     * @param configuration An optional configuration object of type [RpcGetProgramAccountsConfiguration] that can be used to specify various options for the RPC request such as encoding format, commitment level, minimum context slot, and data slice. Defaults to any default values specified in [RpcGetProgramAccountsConfiguration] if not provided.
+     * @param serializer A [KSerializer] instance used to deserialize the response into the appropriate data type, ensuring the structured data can be worked with in a type-safe manner within your Kotlin application.
+     *
+     * @return A list of [Account] objects containing information of all the accounts associated with the specified program ID. The list can contain null elements if information for some accounts could not be retrieved. Returns null if the request fails entirely.
+     *
+     * @throws Exception  if the RPC call fails for reasons such as network issues, incorrect inputs, etc.
+     */
+    suspend fun <T> getProgramAccounts(
+        programId: PublicKey,
+        configuration: RpcGetProgramAccountsConfiguration?,
+        serializer: KSerializer<T>
     ): List<Account<T>?>?
 
     /**
@@ -124,6 +142,15 @@ data class RpcGetMultipleAccountsConfiguration(
     override val commitment: Commitment? = null,
     override val minContextSlot: ULong? = null,
     val dataSlice: RpcDataSlice? = null
+): RpcBaseOptions
+
+@Serializable
+data class RpcGetProgramAccountsConfiguration(
+    override val encoding: Encoding = Encoding.base64,
+    override val commitment: Commitment? = null,
+    override val minContextSlot: ULong? = null,
+    val dataSlice: RpcDataSlice? = null,
+    val filters: List<RpcDataFilter>? = null
 ): RpcBaseOptions
 
 @Serializable
