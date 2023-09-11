@@ -227,7 +227,7 @@ class RPC(
         ).getOrThrow()!!
     }
 
-    suspend fun getSlot(
+    override suspend fun getSlot(
         configuration: RpcGetSlotConfiguration?): Int {
         // Create a list to hold JSON elements for RPC request parameters
         val params: MutableList<JsonElement> = mutableListOf()
