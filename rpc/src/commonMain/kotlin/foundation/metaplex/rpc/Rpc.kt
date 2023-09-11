@@ -226,4 +226,26 @@ class RPC(
             rpcRequest, SolanaResponseSerializer(BlockhashWithExpiryBlockHeight.serializer())
         ).getOrThrow()!!
     }
+
+    suspend fun getSlot(
+        configuration: RpcGetSlotConfiguration?): Int {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+        // Use the provided configuration or create a default one
+        configuration?.let {
+            params.add(json.encodeToJsonElement(RpcGetSlotConfiguration.serializer(), it))
+        }
+        val rpcRequest = JsonRpc20Request(
+            "getSlot",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        return rpcDriver.get(
+            rpcRequest, Int.serializer())
+        .getOrThrow()!!
+    }
+
 }
