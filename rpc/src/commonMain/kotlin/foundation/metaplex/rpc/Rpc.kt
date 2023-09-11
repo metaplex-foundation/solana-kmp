@@ -227,6 +227,22 @@ class RPC(
         ).getOrThrow()!!
     }
 
+    /**
+     * Retrieves the current slot from the Solana blockchain.
+     *
+     * @param configuration An optional configuration to customize the RPC request.
+     *                     Defaults to null, indicating the default configuration will be used.
+     * @return An object containing the current slot
+     *
+     * @throws Exception If there is any error during the RPC request or the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val slotInfo = getSlot(
+     *     RpcGetSlotConfiguration(commitment = Commitment.Finalized)
+     * )
+     * ```
+     */
     override suspend fun getSlot(
         configuration: RpcGetSlotConfiguration?): Int {
         // Create a list to hold JSON elements for RPC request parameters
