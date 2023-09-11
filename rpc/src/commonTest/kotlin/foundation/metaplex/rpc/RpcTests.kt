@@ -60,4 +60,12 @@ class RpcTests {
         assertNotEquals(blockhash.blockhash, "")
         assertTrue { blockhash.lastValidBlockHeight > 0u }
     }
+
+    @Test
+    fun testActualGetSlot() = runTest {
+        val rpc = RPC(rpcUrl)
+        val slot = rpc.getSlot(null)
+        assertNotNull(slot)
+        assertTrue { slot > 0 }
+    }
 }

@@ -73,6 +73,15 @@ interface RpcInterface {
         configuration: RpcGetLatestBlockhashConfiguration?
     ): BlockhashWithExpiryBlockHeight
 
+    /**
+     * Fetch the slot.
+     *
+     * @param options The options to use when fetching the slot.
+     * @returns The current slot.
+     */
+    suspend fun getSlot(
+        configuration: RpcGetSlotConfiguration?
+    ): Int
 
     /**
      * Send a transaction to the blockchain.
@@ -159,6 +168,14 @@ data class RpcGetLatestBlockhashConfiguration(
     override val commitment: Commitment? = null,
     override val minContextSlot: ULong? = null,
 ): RpcBaseOptions
+
+@Serializable
+data class RpcGetSlotConfiguration(
+    override val encoding: Encoding? = null,
+    override val commitment: Commitment? = null,
+    override val minContextSlot: ULong? = null,
+): RpcBaseOptions
+
 
 /**
  * Enumeration representing the commitment level for RPC requests.

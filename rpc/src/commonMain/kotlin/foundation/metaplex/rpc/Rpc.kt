@@ -286,4 +286,42 @@ class RPC(
             rpcRequest, SolanaResponseSerializer(BlockhashWithExpiryBlockHeight.serializer())
         ).getOrThrow()!!
     }
+
+    /**
+     * Retrieves the current slot from the Solana blockchain.
+     *
+     * @param configuration An optional configuration to customize the RPC request.
+     *                     Defaults to null, indicating the default configuration will be used.
+     * @return An object containing the current slot
+     *
+     * @throws Exception If there is any error during the RPC request or the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val slotInfo = getSlot(
+     *     RpcGetSlotConfiguration(commitment = Commitment.Finalized)
+     * )
+     * ```
+     */
+    override suspend fun getSlot(
+        configuration: RpcGetSlotConfiguration?): Int {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+        // Use the provided configuration or create a default one
+        configuration?.let {
+            params.add(json.encodeToJsonElement(RpcGetSlotConfiguration.serializer(), it))
+        }
+        val rpcRequest = JsonRpc20Request(
+            "getSlot",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        return rpcDriver.get(
+            rpcRequest, Int.serializer())
+        .getOrThrow()!!
+    }
+
 }
