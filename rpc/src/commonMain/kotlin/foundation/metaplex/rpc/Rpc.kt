@@ -304,7 +304,7 @@ class RPC(
      * ```
      */
     override suspend fun getSlot(
-        configuration: RpcGetSlotConfiguration?): Int {
+        configuration: RpcGetSlotConfiguration?): ULong {
         // Create a list to hold JSON elements for RPC request parameters
         val params: MutableList<JsonElement> = mutableListOf()
         // Use the provided configuration or create a default one
@@ -320,8 +320,40 @@ class RPC(
 
         // Execute the RPC request and deserialize the response using the provided serializer
         return rpcDriver.get(
-            rpcRequest, Int.serializer())
+            rpcRequest, ULong.serializer())
         .getOrThrow()!!
+    }
+
+    /**
+     * Retrieves the minimum balance required to make account rent exempt from the Solana blockchain.
+     *
+     * @param usize the Account's data length
+     * @return An object containing the minimum balance required to make account rent exempt.
+     *
+     * @throws Exception If there is any error during the RPC request or the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val usizeInfo = getMinimumBalanceForRentExemption(
+     *     usize(commitment = Commitment.Finalized)
+     * )
+     * ```
+     */
+    override suspend fun getMinimumBalanceForRentExemption(usize: ULong): ULong {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+        params.add(json.encodeToJsonElement(usize))
+        val rpcRequest = JsonRpc20Request(
+            "getMinimumBalanceForRentExemption",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        return rpcDriver.get(
+            rpcRequest, ULong.serializer())
+            .getOrThrow()!!
     }
 
 }

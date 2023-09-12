@@ -81,7 +81,17 @@ interface RpcInterface {
      */
     suspend fun getSlot(
         configuration: RpcGetSlotConfiguration?
-    ): Int
+    ): ULong
+
+    /**
+     * Fetch the Minimum Balance For Rent Exemption.
+     *
+     * @param usize The Account's data length
+     * @returns The Minimum Balance For Rent Exemption.
+     */
+    suspend fun getMinimumBalanceForRentExemption(
+        usize: ULong
+    ): ULong
 
     /**
      * Send a transaction to the blockchain.
@@ -175,7 +185,6 @@ data class RpcGetSlotConfiguration(
     override val commitment: Commitment? = null,
     override val minContextSlot: ULong? = null,
 ): RpcBaseOptions
-
 
 /**
  * Enumeration representing the commitment level for RPC requests.

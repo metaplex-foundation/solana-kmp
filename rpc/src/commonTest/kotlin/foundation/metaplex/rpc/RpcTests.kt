@@ -66,6 +66,14 @@ class RpcTests {
         val rpc = RPC(rpcUrl)
         val slot = rpc.getSlot(null)
         assertNotNull(slot)
-        assertTrue { slot > 0 }
+        assertTrue { slot > 0u }
+    }
+
+    @Test
+    fun testActualGetMinimumBalanceForRentExemption() = runTest {
+        val rpc = RPC(rpcUrl)
+        val minimumBalanceForRentExemption = rpc.getMinimumBalanceForRentExemption(50u)
+        assertNotNull(minimumBalanceForRentExemption)
+        assertEquals(minimumBalanceForRentExemption, 1238880u)
     }
 }
