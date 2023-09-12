@@ -20,21 +20,25 @@ class ReadApiDecoratorTests {
         val randomPublicKey = PublicKey("Geh5Ss5knQGym81toYGXDbH3MFU2JCMK7E4QyeBHor1b")
         val assets = readApiDecorator.getAssetsByOwner(GetAssetsByOwnerRpcInput(randomPublicKey))
         assertTrue { assets.total > 0 }
+        assertEquals("RedButo #1911", assets.items[1].content.metadata!!.name, )
+        assertEquals("https://www.arweave.net/Na-z1R0HXNLh9NkuP9cxq7p9fb8KaJt6QX2Bds5hRig?ext=png", assets.items[1].content.files!!.first().uri)
+        assertEquals("https://www.arweave.net/Na-z1R0HXNLh9NkuP9cxq7p9fb8KaJt6QX2Bds5hRig?ext=png", assets.items[1].content.links!!.image)
     }
 
     @Test
     fun testReadApiGetAsset() = runTest {
         val randomAssetKey = PublicKey("BWvhiDKg1c1tB2nCSjmT6mxzxDr8RvTzzy8PSsYpFHY3")
         val asset = readApiDecorator.getAsset(randomAssetKey)
-        assertEquals(asset.id, randomAssetKey)
-        assertEquals(asset.content.metadata?.name, "Bread Head | #779")
+        assertEquals(randomAssetKey, asset.id)
+        assertEquals("Bread Head | #779", asset.content.metadata!!.name)
+        assertEquals("https://www.arweave.net/nMkIdhuoa49pRmATpfo8rgkIBxTrPbCF6JuZqufMJy0?ext=png", asset.content.files?.first()!!.uri)
     }
 
     @Test
     fun testReadApiGetAssetProof() = runTest {
         val randomAssetKey = PublicKey("5Vaji1rsmhRCXJXPzZgXbfwbVvUtZGR2F9FXaaKQ1cME")
         val assetProof = readApiDecorator.getAssetProof(randomAssetKey)
-        assertEquals(assetProof.proof.first(), PublicKey("GZxgRaFoyxR2Vo3nUKVXQ2716Q7rdisjbNeu1m6SCoyH"))
+        assertEquals(PublicKey("GZxgRaFoyxR2Vo3nUKVXQ2716Q7rdisjbNeu1m6SCoyH"), assetProof.proof.first())
     }
 
     @Test
