@@ -34,7 +34,9 @@ data class ReadApiParamAssetSortBy(
 @Serializable
 data class ReadApiAssetContent(
     val jsonUri: String? = null,
-    val metadata: JsonMetadata? = null
+    val metadata: JsonMetadata? = null,
+    val files: List<File>? = null,
+    val links: Link? = null
 )
 
 @Serializable

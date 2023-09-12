@@ -44,8 +44,17 @@ data class Creator(
 data class File(
     val type: String? = null,
     val uri: String? = null,
+    val mime: String? = null,
     val unknownFields: JsonObject? = null
 )
+
+@Serializable
+data class Link(
+    val image: String? = null,
+    val external_url: String? = null,
+    val animation_url: String? = null,
+)
+
 
 @Serializable
 data class Collection(
