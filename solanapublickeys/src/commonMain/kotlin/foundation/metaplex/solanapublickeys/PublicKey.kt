@@ -94,9 +94,9 @@ data class PublicKey(val publicKeyBytes: PublicKeyBytes) {
             }
             buffer.resetForRead()
             val hash = Hash(type = Hash.Type.SHA256).hash(buffer.readByteArray(bufferSize))
-            /*if (TweetNaclFast.is_on_curve(hash) != 0) {
+            if (TweetNaclFast.is_on_curve(hash) != 0) {
                 throw RuntimeException("Invalid seeds, address must fall off the curve")
-            }*/
+            }
             return PublicKey(hash)
         }
 
