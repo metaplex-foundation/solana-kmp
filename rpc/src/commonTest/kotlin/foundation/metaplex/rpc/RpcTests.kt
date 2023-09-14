@@ -76,4 +76,13 @@ class RpcTests {
         assertNotNull(minimumBalanceForRentExemption)
         assertEquals(minimumBalanceForRentExemption, 1238880u)
     }
+
+    @Test
+    fun testActualGetBalance() = runTest {
+        val rpc = RPC(rpcUrl)
+        val publicKey = PublicKey("83astBRguLMdt2h5U1Tpdq5tjFoJ6noeGwaY3mDLVcri")
+        val balance = rpc.getBalance(publicKey, null)
+        assertNotNull(balance)
+        assertNotNull(publicKey)
+    }
 }
