@@ -130,7 +130,7 @@ class PublicKeyTests {
                 ),
                 programId2
             )
-        assertTrue(programAddress2.address.equals(PublicKey("AF2Sc7aSsgWZermjzH4TfmiMnNRqXTHdWy2EnKCwjoy")))
-        assertEquals(programAddress2.nonce, 255)
+        assertTrue(programAddress2.address.equals(PublicKey("GXLbx3CbJuTTtJDZeS1PGzwJJ5jGYVEqcXum7472kpUp")))
+        assertEquals(programAddress2.nonce, 254)
     }
 }
