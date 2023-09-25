@@ -1,5 +1,6 @@
 package foundation.metaplex.rpc
 
+import foundation.metaplex.amount.SolAmount
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -92,6 +93,10 @@ interface RpcInterface {
     suspend fun getMinimumBalanceForRentExemption(
         usize: ULong
     ): ULong
+
+    suspend fun requestAirdrop(
+        configuration: RpcRequestAirdropConfiguration
+    ): TransactionSignature
 
     /**
      * Fetch the Balance of the account of provided Pubkey
@@ -203,6 +208,12 @@ data class RpcGetBalanceConfiguration(
     override val commitment: Commitment? = null,
     override val minContextSlot: ULong? = null,
 ): RpcBaseOptions
+data class RpcRequestAirdropConfiguration(
+    val publicKey: PublicKey,
+    val lamports: SolAmount,
+    val commitment: Commitment? = null,
+)
+
 /**
  * Enumeration representing the commitment level for RPC requests.
  */

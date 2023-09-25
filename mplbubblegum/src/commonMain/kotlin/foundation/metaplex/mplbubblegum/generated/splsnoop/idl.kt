@@ -1,0 +1,23 @@
+package foundation.metaplex.mplbubblegum.generated.splsnoop
+
+val SPLSnopJson = """
+{
+  "version": "0.1.3",
+  "name": "spl_noop",
+  "instructions": [
+    {
+      "name": "noopInstruction",
+      "args": [
+        {
+          "name": "data",
+          "type": "bytes"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "address": "noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV",
+    "origin": "shank"
+  }
+}
+""".trimIndent()
