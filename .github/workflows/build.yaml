@@ -57,11 +57,11 @@ jobs:
           cache: gradle
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Publish to iOS
+      - name: Build XCFrameworks
         run: ./gradlew buildReleaseXCFramework --stacktrace -P version=${TAG:1}
         env:
           TAG: ${{ github.event.release.tag_name }}
-      - name: Zip files
+      - name: Zip XCFramework files
         run: |
           cd XCFrameworkOutputs/
           zip -vr amount.xcframework.zip amount.xcframework/
@@ -75,7 +75,7 @@ jobs:
           zip -vr signer.xcframework.zip signer.xcframework/
       - uses: actions/upload-artifact@v3
         with:
-          name: XCFrameworkOutputs/
+          name: XCFrameworkOutputs/*.zip
       - name: Publish to Maven Central
         run: ./gradlew clean publishAllPublicationsToMavenCentral --stacktrace -P version=${TAG:1}
         env:

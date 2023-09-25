@@ -31,7 +31,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "MetaplexReadApi"
+            baseName = "ReadApi"
             xcf.add(this)
         }
     }
@@ -78,7 +78,7 @@ mavenPublishing {
 }
 
 frameworkBundlerConfig {
-    frameworkName.set("MetaplexReadApi")
+    frameworkName.set("readapi")
     outputPath.set("$rootDir/XCFrameworkOutputs")
     versionName.set(version as String)
     frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK

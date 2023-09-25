@@ -80,7 +80,7 @@ mavenPublishing {
 }
 
 frameworkBundlerConfig {
-    frameworkName.set("RPC")
+    frameworkName.set("rpc")
     outputPath.set("$rootDir/XCFrameworkOutputs")
     versionName.set(version as String)
     frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK
