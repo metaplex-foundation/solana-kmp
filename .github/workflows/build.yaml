@@ -44,7 +44,7 @@ jobs:
   publish:
     runs-on: macos-latest
     needs: build
-    # if: ${{ github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v') }}
+    if: ${{ github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v') }}
 
     steps:
       - name: Checkout
@@ -73,9 +73,12 @@ jobs:
           zip -vr readapi.xcframework.zip readapi.xcframework/
           zip -vr rpc.xcframework.zip rpc.xcframework/
           zip -vr signer.xcframework.zip signer.xcframework/
-      - uses: actions/upload-artifact@v3
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: XCFrameworkOutputs/*.zip
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            file: XCFrameworkOutputs/*.zip
+            tag: ${{ github.ref }}
       - name: Publish to Maven Central
         run: ./gradlew clean publishAllPublicationsToMavenCentral --stacktrace -P version=${TAG:1}
         env:
