@@ -17,7 +17,7 @@ class NetworkingTests {
     fun testNetworkingHttpRequest() = runTest {
         val networkDriver = NetworkDriver()
         val request = MockHttpRequest(
-            "https://android.com",
+            "https://api.mainnet-beta.solana.com/",
             "get",
             mapOf("html" to "Content-Type"),
             "echo"
