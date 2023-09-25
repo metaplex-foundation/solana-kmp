@@ -63,7 +63,7 @@ jobs:
         run: ./gradlew buildReleaseXCFramework --stacktrace -P version=${TAG:1}
         env:
           TAG: ${{ github.event.release.tag_name }}
-      - uses: Zip output
+      - name: Zip output
         run: zip -qq -r amount.zip amount.xcframework
         working-directory: XCFrameworkOutputs
       - uses: actions/upload-artifact@v3
