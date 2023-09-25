@@ -392,6 +392,13 @@ class RPC(
             rpcRequest, SolanaResponseSerializer(Long.serializer()))
             .getOrThrow()!!
     }
+
+    /**
+     * Requests an airdrop of tokens to the specified account on the Solana blockchain.
+     *
+     * @param configuration The configuration for the airdrop request.
+     * @return A transaction signature representing the result of the airdrop request.
+     */
     override suspend fun requestAirdrop(configuration: RpcRequestAirdropConfiguration): TransactionSignature {
         val params: MutableList<JsonElement> = mutableListOf()
         params.add(json.encodeToJsonElement(configuration.publicKey.toBase58()))

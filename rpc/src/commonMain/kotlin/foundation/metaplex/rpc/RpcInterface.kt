@@ -94,6 +94,12 @@ interface RpcInterface {
         usize: ULong
     ): ULong
 
+    /**
+     * Requests an airdrop of tokens to the specified account on the Solana blockchain.
+     *
+     * @param configuration The configuration for the airdrop request.
+     * @return A transaction signature representing the result of the airdrop request.
+     */
     suspend fun requestAirdrop(
         configuration: RpcRequestAirdropConfiguration
     ): TransactionSignature
