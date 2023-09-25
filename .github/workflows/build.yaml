@@ -44,7 +44,7 @@ jobs:
   publish:
     runs-on: macos-latest
     needs: build
-    if: ${{ github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v') }}
+    # if: ${{ github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v') }}
 
     steps:
       - name: Checkout
@@ -59,6 +59,16 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+	  - name: Publish to iOS
+        run: ./gradlew buildReleaseXCFramework --stacktrace -P version=${TAG:1}
+		env:
+          TAG: ${{ github.event.release.tag_name }}
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r XCFrameworkOutputs/amount.zip XCFrameworkOutputs/amount.xcframework
+	  - uses: actions/upload-artifact@v3
+		with:
+          name: XCFrameworkOutputs/amount.zip
       - name: Publish to Maven Central
         run: ./gradlew clean publishAllPublicationsToMavenCentral --stacktrace -P version=${TAG:1}
         env:
