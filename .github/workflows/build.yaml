@@ -58,7 +58,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build XCFrameworks
-        run: ./gradlew buildReleaseXCFramework --stacktrace -P version=${TAG:1}
+        run: ./gradlew amount:buildReleaseXCFramework --stacktrace -P version=${TAG:1}
         env:
           TAG: ${{ github.event.release.tag_name }}
       - name: Zip XCFramework files
