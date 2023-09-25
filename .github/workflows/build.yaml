@@ -61,9 +61,21 @@ jobs:
         run: ./gradlew buildReleaseXCFramework --stacktrace -P version=${TAG:1}
         env:
           TAG: ${{ github.event.release.tag_name }}
+      - name: Zip files
+        run: |
+          cd XCFrameworkOutputs/
+          zip -vr amount.xcframework.zip amount.xcframework/
+          zip -vr base58.xcframework.zip base58.xcframework/
+          zip -vr mplbubblegum.xcframework.zip mplbubblegum.xcframework/
+          zip -vr solana.xcframework.zip solana.xcframework/
+          zip -vr solanapublickeys.xcframework.zip solanapublickeys.xcframework/
+          zip -vr solanaeddsa.xcframework.zip solanaeddsa.xcframework/
+          zip -vr readapi.xcframework.zip readapi.xcframework/
+          zip -vr rpc.xcframework.zip rpc.xcframework/
+          zip -vr signer.xcframework.zip signer.xcframework/
       - uses: actions/upload-artifact@v3
         with:
-          name: XCFrameworkOutputs/     
+          name: XCFrameworkOutputs/
       - name: Publish to Maven Central
         run: ./gradlew clean publishAllPublicationsToMavenCentral --stacktrace -P version=${TAG:1}
         env:
