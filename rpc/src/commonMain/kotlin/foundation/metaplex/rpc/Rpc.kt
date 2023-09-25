@@ -356,4 +356,42 @@ class RPC(
             .getOrThrow()!!
     }
 
+    /**
+     * Retrieves the balance of the account of provided Pubkey from the Solana blockchain.
+     *
+     * @param Pubkey of account to query, as base-58 encoded string
+     * @return The balance of the account of provided Pubkey
+     *
+     * @throws Exception If there is any error during the RPC request or the deserialization of the response.
+     *
+     * Example usage:
+     * ```
+     * val Pubkey = getBalance(
+     *     Pubkey(commitment = Commitment.Finalized)
+     * )
+     * ```
+     */
+    override suspend fun getBalance(
+        publicKey: PublicKey,
+        configuration: RpcGetBalanceConfiguration?): Long {
+        // Create a list to hold JSON elements for RPC request parameters
+        val params: MutableList<JsonElement> = mutableListOf()
+        params.add(json.encodeToJsonElement(publicKey.toBase58()))
+        // Use the provided configuration or create a default one
+        configuration?.let {
+            params.add(json.encodeToJsonElement(RpcGetBalanceConfiguration.serializer(), it))
+        }
+        val rpcRequest = JsonRpc20Request(
+            "getBalance",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        return rpcDriver.get(
+            rpcRequest, SolanaResponseSerializer(Long.serializer()))
+            .getOrThrow()!!
+    }
+
 }

@@ -94,6 +94,17 @@ interface RpcInterface {
     ): ULong
 
     /**
+     * Fetch the Balance of the account of provided Pubkey
+     *
+     * @param Pubkey of account to query, as base-58 encoded string
+     * @returns The balance of the account of provided Pubkey
+     */
+    suspend fun getBalance(
+        publicKey: PublicKey,
+        configuration: RpcGetBalanceConfiguration?
+    ): Long
+
+    /**
      * Send a transaction to the blockchain.
      *
      * @param transaction The transaction to send.
@@ -186,6 +197,12 @@ data class RpcGetSlotConfiguration(
     override val minContextSlot: ULong? = null,
 ): RpcBaseOptions
 
+@Serializable
+data class RpcGetBalanceConfiguration(
+    override val encoding: Encoding? = null,
+    override val commitment: Commitment? = null,
+    override val minContextSlot: ULong? = null,
+): RpcBaseOptions
 /**
  * Enumeration representing the commitment level for RPC requests.
  */
@@ -261,3 +278,4 @@ data class BlockhashWithExpiryBlockHeight(
     val blockhash: Blockhash,
     val lastValidBlockHeight: ULong,
 )
+
