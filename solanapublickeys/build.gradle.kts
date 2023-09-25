@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.maven.publish)
+    alias(libs.plugins.kmp.framework.bundler)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -65,4 +66,11 @@ android {
 
 mavenPublishing {
     coordinates(group as String, "solanapublickeys", version as String)
+}
+
+frameworkBundlerConfig {
+    frameworkName.set("SolanaPublicKeys")
+    outputPath.set("$rootDir/XCFrameworkOutputs")
+    versionName.set(version as String)
+    frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK
 }
