@@ -1,5 +1,6 @@
 package foundation.metaplex.rpc
 
+import foundation.metaplex.amount.sol
 import foundation.metaplex.rpc.serializers.BorshAsBase64JsonArraySerializer
 import foundation.metaplex.rpc.serializers.Key
 import foundation.metaplex.rpc.serializers.Metadata
@@ -85,4 +86,12 @@ class RpcTests {
         assertNotNull(balance)
         assertNotNull(publicKey)
     }
+
+    /* This is heavily rate limited.
+    @Test
+    fun testRequestAirdrop() = runTest {
+        val rpc = RPC("https://api.devnet.solana.com")
+        val signature = rpc.requestAirdrop(RpcRequestAirdropConfiguration(PublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo"), sol(0.1)))
+        assertNotNull(signature)
+    } */
 }

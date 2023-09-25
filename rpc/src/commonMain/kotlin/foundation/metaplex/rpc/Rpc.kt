@@ -386,12 +386,37 @@ class RPC(
             id = "${Random.nextUInt()}",
             params = JsonArray(content = params)
         )
-        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
 
-        // Execute the RPC request and deserialize the response using the provided serializer
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
         return rpcDriver.get(
             rpcRequest, SolanaResponseSerializer(Long.serializer()))
             .getOrThrow()!!
     }
 
+    /**
+     * Requests an airdrop of tokens to the specified account on the Solana blockchain.
+     *
+     * @param configuration The configuration for the airdrop request.
+     * @return A transaction signature representing the result of the airdrop request.
+     */
+    override suspend fun requestAirdrop(configuration: RpcRequestAirdropConfiguration): TransactionSignature {
+        val params: MutableList<JsonElement> = mutableListOf()
+        params.add(json.encodeToJsonElement(configuration.publicKey.toBase58()))
+        params.add(json.encodeToJsonElement(configuration.lamports.basisPoints.longValue()))
+        configuration.commitment?.let {
+            params.add(json.encodeToJsonElement(configuration.commitment.name))
+        }
+        val rpcRequest = JsonRpc20Request(
+            "requestAirdrop",
+            id = "${Random.nextUInt()}",
+            params = JsonArray(content = params)
+        )
+        val rpcDriver = Rpc20Driver(rpcUrl, httpNetworkDriver)
+
+        // Execute the RPC request and deserialize the response using the provided serializer
+        val response = rpcDriver.get(
+            rpcRequest, String.serializer())
+            .getOrThrow()!!
+        return response.encodeToByteArray()
+    }
 }
