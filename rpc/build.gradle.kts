@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.maven.publish)
     kotlin("plugin.serialization") version "1.9.0"
+    alias(libs.plugins.kmp.framework.bundler)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -76,4 +77,11 @@ android {
 
 mavenPublishing {
     coordinates(group as String, "rpc", version as String)
+}
+
+frameworkBundlerConfig {
+    frameworkName.set("rpc")
+    outputPath.set("$rootDir/XCFrameworkOutputs")
+    versionName.set(version as String)
+    frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK
 }

@@ -1,9 +1,11 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import com.prof18.kmpframeworkbundler.data.FrameworkType
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.maven.publish)
+    alias(libs.plugins.kmp.framework.bundler)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -63,4 +65,11 @@ android {
 
 mavenPublishing {
     coordinates(group as String, "amount", version as String)
+}
+
+frameworkBundlerConfig {
+    frameworkName.set("Amount")
+    outputPath.set("$rootDir/XCFrameworkOutputs")
+    versionName.set(version as String)
+    frameworkType = FrameworkType.XC_FRAMEWORK
 }
