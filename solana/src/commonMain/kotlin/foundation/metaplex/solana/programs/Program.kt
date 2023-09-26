@@ -1,4 +1,4 @@
-package foundation.metaplex.mplbubblegum.system
+package foundation.metaplex.solana.programs
 
 import foundation.metaplex.solana.transactions.AccountMeta
 import foundation.metaplex.solana.transactions.TransactionInstruction
