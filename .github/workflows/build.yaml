@@ -83,9 +83,17 @@ jobs:
           zip -vr readapi.xcframework.zip readapi.xcframework/
           zip -vr rpc.xcframework.zip rpc.xcframework/
           zip -vr signer.xcframework.zip signer.xcframework/
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-            file: XCFrameworkOutputs/*.zip
-            tag: ${{ github.ref }}
+          files: |
+            XCFrameworkOutputs/amount.xcframework.zip
+            XCFrameworkOutputs/base58.xcframework.zip
+            XCFrameworkOutputs/mplbubblegum.xcframework.zip
+            XCFrameworkOutputs/solana.xcframework.zip
+            XCFrameworkOutputs/solanapublickeys.xcframework.zip
+            XCFrameworkOutputs/solanaeddsa.xcframework.zip
+            XCFrameworkOutputs/readapi.xcframework.zip
+            XCFrameworkOutputs/rpc.xcframework.zip
+            XCFrameworkOutputs/signer.xcframework.zip
