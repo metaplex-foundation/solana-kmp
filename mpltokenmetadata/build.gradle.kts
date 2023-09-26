@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.library)
+    kotlin("plugin.serialization") version "1.9.0"
     alias(libs.plugins.maven.publish)
     alias(libs.plugins.kmp.framework.bundler)
 }
@@ -29,7 +30,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "Solana"
+            baseName = "MPLTokenmetadata"
             xcf.add(this)
         }
     }
@@ -37,17 +38,10 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(project(mapOf("path" to ":amount")))
-                api(project(mapOf("path" to ":base58")))
-                api(project(mapOf("path" to ":readapi")))
-                api(project(mapOf("path" to ":rpc")))
-                api(project(mapOf("path" to ":signer")))
-                api(project(mapOf("path" to ":solanaeddsa")))
-                api(project(mapOf("path" to ":solanapublickeys")))
-                implementation(libs.buffer)
-                implementation(libs.kborsh)
+                api(project(mapOf("path" to ":solana")))
                 implementation(libs.kotlinx.serialization.json)
-                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kborsh)
+                implementation(libs.buffer)
             }
         }
         val commonTest by getting {
@@ -56,13 +50,11 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.test)
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
     }
 }
 
 android {
-    namespace = "foundation.metaplex.solana"
+    namespace = "foundation.metaplex.mpltokenmetadata"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -74,11 +66,11 @@ android {
 }
 
 mavenPublishing {
-    coordinates(group as String, "solana", version as String)
+    coordinates(group as String, "mpltokenmetadata", version as String)
 }
 
 frameworkBundlerConfig {
-    frameworkName.set("Solana")
+    frameworkName.set("mpltokenmetadata")
     outputPath.set("$rootDir/XCFrameworkOutputs")
     versionName.set(version as String)
     frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK

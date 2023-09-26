@@ -11,10 +11,9 @@ import foundation.metaplex.mplbubblegum.generated.bubblegum.TokenStandard
 import foundation.metaplex.mplbubblegum.generated.bubblegum.TreeConfig
 import foundation.metaplex.mplbubblegum.generated.bubblegum.hook.CompressionAccountType
 import foundation.metaplex.mplbubblegum.generated.bubblegum.hook.MerkleTree
-import foundation.metaplex.mplbubblegum.system.SystemProgram
-import foundation.metaplex.mplbubblegum.system.SystemProgram.PROGRAM_ID
+import foundation.metaplex.solana.programs.SystemProgram
+import foundation.metaplex.solana.programs.SystemProgram.PROGRAM_ID
 import foundation.metaplex.rpc.RPC
-import foundation.metaplex.rpc.RpcRequestAirdropConfiguration
 import foundation.metaplex.rpc.serializers.AnchorAccountSerializer
 import foundation.metaplex.rpc.serializers.BorshAsBase64JsonArraySerializer
 import foundation.metaplex.solana.transactions.SolanaTransactionBuilder

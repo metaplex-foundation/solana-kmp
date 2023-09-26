@@ -1,4 +1,4 @@
-package foundation.metaplex.mplbubblegum.system
+package foundation.metaplex.solana.programs
 
 import com.funkatronics.kborsh.BorshEncoder
 import foundation.metaplex.rpc.serializers.PublicKeyAs32ByteSerializer

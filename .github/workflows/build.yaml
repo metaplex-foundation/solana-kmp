@@ -83,6 +83,7 @@ jobs:
           zip -vr readapi.xcframework.zip readapi.xcframework/
           zip -vr rpc.xcframework.zip rpc.xcframework/
           zip -vr signer.xcframework.zip signer.xcframework/
+          zip -vr mpltokenmetadata.xcframework.zip mpltokenmetadata.xcframework/
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
@@ -97,3 +98,4 @@ jobs:
             XCFrameworkOutputs/readapi.xcframework.zip
             XCFrameworkOutputs/rpc.xcframework.zip
             XCFrameworkOutputs/signer.xcframework.zip
+            XCFrameworkOutputs/mpltokenmetadata.xcframework.zip
