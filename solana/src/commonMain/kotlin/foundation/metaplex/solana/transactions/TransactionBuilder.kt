@@ -1,11 +1,15 @@
 package foundation.metaplex.solana.transactions
 
 import com.metaplex.signer.Signer
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 
 /**
  * This interface defines a TransactionBuilder, which is responsible for constructing a transaction.
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("TransactionBuilder")
 interface TransactionBuilder {
 
     /**

@@ -2,11 +2,15 @@ package foundation.metaplex.solanaeddsa
 
 import com.metaplex.signer.Signer
 import foundation.metaplex.solanapublickeys.PublicKey
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 /**
  * The `Keypair` interface represents a key pair consisting of a public key and a secret key.
  * Implementing classes must provide access to both the public key and the secret key.
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("Keypair")
 interface Keypair {
     val publicKey: PublicKey
     val secretKey: ByteArray
@@ -19,6 +23,8 @@ interface Keypair {
  * @param publicKey The public key associated with this key pair.
  * @param secretKey The secret key associated with this key pair as a byte array.
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("SolanaKeypair")
 internal class SolanaKeypair(
     override val publicKey: PublicKey,
     override val secretKey: ByteArray

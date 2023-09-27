@@ -5,10 +5,14 @@ import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 /**
  * Represents an interface for making remote procedure calls (RPC).
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("RpcInterface")
 interface RpcInterface {
 
     /**

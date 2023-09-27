@@ -1,6 +1,8 @@
 package foundation.metaplex.solana.transactions
 
 import foundation.metaplex.solanapublickeys.PublicKey
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 data class CompiledInstruction(
     val programIdIndex: Int,
@@ -29,6 +31,8 @@ data class MessageHeader (
 /**
  * Represents a message to be sent over a network, containing instructions and associated data.
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("Message")
 interface Message {
 
     /**

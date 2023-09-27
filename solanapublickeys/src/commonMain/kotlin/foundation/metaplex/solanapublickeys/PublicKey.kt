@@ -5,6 +5,8 @@ import com.ditchoom.buffer.allocate
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
 import diglol.crypto.Hash
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 const val PUBLIC_KEY_LENGTH = 32
 
@@ -16,13 +18,9 @@ const val PUBLIC_KEY_LENGTH = 32
  *
  * @category Signers and PublicKeys
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("Pda")
 data class Pda(val address: PublicKey, val nonce: Int)
-
-/**
- * A Uint8Array that represents a public key.
- * @category Signers and PublicKeys
- */
-typealias PublicKeyBytes = ByteArray
 
 
 /**
@@ -37,7 +35,9 @@ interface HasPublicKey {
  * The amount of bytes in a public key.
  * @category Signers and PublicKeys
  */
-data class PublicKey(val publicKeyBytes: PublicKeyBytes) {
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("PublicKey")
+data class PublicKey(val publicKeyBytes: ByteArray) {
     init {
         require(publicKeyBytes.size <= PUBLIC_KEY_LENGTH) { "Invalid public key input" }
     }

@@ -1,8 +1,11 @@
 package foundation.metaplex.solana.transactions
 
 import com.metaplex.signer.Signer
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
-
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("SolanaTransactionBuilder")
 class SolanaTransactionBuilder : TransactionBuilder {
     private val transaction: Transaction = SolanaTransaction()
     override fun addInstruction(transactionInstruction: TransactionInstruction): TransactionBuilder {

@@ -2,6 +2,8 @@ package foundation.metaplex.solana.transactions
 
 import com.metaplex.signer.Signer
 import foundation.metaplex.solanapublickeys.PublicKey
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 /**
  * A Uint8Array that represents a transaction signature.
@@ -83,6 +85,8 @@ typealias Blockhash = String
 /**
  * Represents a transaction that can be constructed, signed, and executed within a certain context.
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("Transaction")
 interface Transaction {
     /**
      * Adds one or more transaction instructions to the transaction.

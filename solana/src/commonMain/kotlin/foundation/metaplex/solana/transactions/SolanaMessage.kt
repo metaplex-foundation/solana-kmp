@@ -7,7 +7,11 @@ import foundation.metaplex.base58.encodeToBase58String
 import foundation.metaplex.solana.util.Shortvec
 import foundation.metaplex.solanapublickeys.PUBLIC_KEY_LENGTH
 import foundation.metaplex.solanapublickeys.PublicKey
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("WrappedInstruction")
 class WrappedInstruction(
     var programIdIndex: Byte = 0,
     var keyIndicesCount: ByteArray,
@@ -21,7 +25,8 @@ class WrappedInstruction(
             1 + keyIndicesCount.count() + keyIndices.count() + dataLength.count() + data.count()
 }
 
-
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("SolanaMessage")
 class SolanaMessage(
     override val header: MessageHeader,
     override val accountKeys: List<PublicKey>,

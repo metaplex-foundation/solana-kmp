@@ -8,6 +8,8 @@ import foundation.metaplex.base58.encodeToBase58String
 import foundation.metaplex.solana.util.Shortvec
 import foundation.metaplex.solanaeddsa.SolanaEddsa
 import foundation.metaplex.solanapublickeys.PublicKey
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 
 /**
  * The maximum amount of bytes that can be used for a transaction.
@@ -17,6 +19,8 @@ const val PACKET_DATA_SIZE = 1280 - 40 - 8
 
 const val SIGNATURE_LENGTH = 64
 
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("SolanaTransaction")
 class SolanaTransaction: Transaction {
     var signatures = mutableListOf<SignaturePubkeyPair>()
     val signature: ByteArray?

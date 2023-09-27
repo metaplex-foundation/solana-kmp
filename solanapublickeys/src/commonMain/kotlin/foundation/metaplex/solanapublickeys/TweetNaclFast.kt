@@ -8,7 +8,7 @@ import kotlin.jvm.JvmOverloads
  * @description
  *   TweetNacl.c Java porting
  * */
-object TweetNaclFast {
+internal object TweetNaclFast {
     private val _0 = ByteArray(16)
     private val _9 = ByteArray(32)
 
