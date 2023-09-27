@@ -31,7 +31,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "ReadApi"
+            baseName = "readapi"
             xcf.add(this)
         }
     }

@@ -30,7 +30,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "MPLBubblegum"
+            baseName = "mplbubblegum"
             xcf.add(this)
         }
     }
@@ -70,7 +70,7 @@ mavenPublishing {
 }
 
 frameworkBundlerConfig {
-    frameworkName.set("MPLBubblegum")
+    frameworkName.set("mplbubblegum")
     outputPath.set("$rootDir/XCFrameworkOutputs")
     versionName.set(version as String)
     frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK
