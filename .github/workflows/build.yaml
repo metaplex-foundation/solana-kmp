@@ -44,7 +44,7 @@ jobs:
   publish:
     runs-on: macos-latest
     needs: build
-    # if: ${{ github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v') }}
+    if: ${{ github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v') }}
 
     steps:
       - name: Checkout
