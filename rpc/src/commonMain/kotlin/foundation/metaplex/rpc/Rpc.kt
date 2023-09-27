@@ -15,8 +15,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.encodeToJsonElement
+import kotlin.experimental.ExperimentalObjCName
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.native.ObjCName
 import kotlin.random.Random
 import kotlin.random.nextUInt
 
@@ -27,6 +29,8 @@ import kotlin.random.nextUInt
  * @param httpNetworkDriver An optional HTTP network driver used for making HTTP requests.
  *                         Defaults to a standard NetworkDriver if not provided.
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("RPC")
 class RPC(
     private val rpcUrl: String,
     private val httpNetworkDriver: HttpNetworkDriver = NetworkDriver(),

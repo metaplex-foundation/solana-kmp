@@ -31,6 +31,15 @@ kotlin {
         it.binaries.framework {
             baseName = "solana"
             xcf.add(this)
+
+            export(project(":amount"))
+            export(project(":base58"))
+            export(project(":readapi"))
+            export(project(":amount"))
+            export(project(":rpc"))
+            export(project(":signer"))
+            export(project(":solanaeddsa"))
+            export(project(":solanapublickeys"))
         }
     }
 

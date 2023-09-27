@@ -1,5 +1,10 @@
 package foundation.metaplex.amount
 
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
+
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("AmountErrors")
 sealed class AmountErrors(message: String): Exception(message) {
     data class UnexpectedAmountError(
         val amount: Amount<*, *>,

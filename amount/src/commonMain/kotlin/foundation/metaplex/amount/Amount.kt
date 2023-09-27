@@ -1,8 +1,10 @@
 package foundation.metaplex.amount
 
 import com.ionspin.kotlin.bignum.integer.BigInteger
+import kotlin.experimental.ExperimentalObjCName
 import kotlin.math.absoluteValue
 import kotlin.math.pow
+import kotlin.native.ObjCName
 
 /**
  * The identifier of an amount.
@@ -30,6 +32,8 @@ typealias AmountDecimals = Int
  *
  * @category Utils — Amounts
  */
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("Amount")
 data class Amount<I : AmountIdentifier, D : AmountDecimals>(
     val basisPoints: BigInteger,
     val identifier: I,

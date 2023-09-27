@@ -6,9 +6,12 @@ import com.funkatronics.rpccore.JsonRpc20Request
 import com.funkatronics.rpccore.get
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.json.Json
+import kotlin.experimental.ExperimentalObjCName
+import kotlin.native.ObjCName
 import kotlin.random.Random
 
-
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("ReadApiInterface")
 interface ReadApiInterface {
     suspend fun getAsset(assetId: PublicKey): ReadApiAsset
     suspend fun getAssetProof(assetId: PublicKey): GetAssetProofRpcResponse
@@ -16,6 +19,8 @@ interface ReadApiInterface {
     suspend fun getAssetsByOwner(input: GetAssetsByOwnerRpcInput): ReadApiAssetList
 }
 
+@OptIn(ExperimentalObjCName::class)
+@ObjCName("ReadApiDecorator")
 class ReadApiDecorator(
     private val rpcUrl: String,
     private val httpNetworkDriver: HttpNetworkDriver
