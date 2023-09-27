@@ -33,6 +33,9 @@ kotlin {
             baseName = "rpc"
             xcf.add(this)
         }
+        dependencies{
+            implementation(libs.ktor.client.darwin)
+        }
     }
 
     sourceSets {
