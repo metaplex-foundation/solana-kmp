@@ -32,6 +32,7 @@ kotlin {
         it.binaries.framework {
             baseName = "mplbubblegum"
             xcf.add(this)
+            export(project(":solana"))
         }
     }
 

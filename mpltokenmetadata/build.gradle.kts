@@ -32,6 +32,7 @@ kotlin {
         it.binaries.framework {
             baseName = "mpltokenmetadata"
             xcf.add(this)
+
         }
     }
 
