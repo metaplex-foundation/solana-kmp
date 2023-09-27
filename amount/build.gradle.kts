@@ -30,7 +30,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "Amount"
+            baseName = "amount"
             xcf.add(this)
         }
     }
@@ -68,7 +68,7 @@ mavenPublishing {
 }
 
 frameworkBundlerConfig {
-    frameworkName.set("Amount")
+    frameworkName.set("amount")
     outputPath.set("$rootDir/XCFrameworkOutputs")
     versionName.set(version as String)
     frameworkType = FrameworkType.XC_FRAMEWORK

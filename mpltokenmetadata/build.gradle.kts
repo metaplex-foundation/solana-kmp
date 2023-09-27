@@ -30,7 +30,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "MPLTokenmetadata"
+            baseName = "mpltokenmetadata"
             xcf.add(this)
         }
     }

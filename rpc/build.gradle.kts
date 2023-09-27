@@ -30,7 +30,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "RPC"
+            baseName = "rpc"
             xcf.add(this)
         }
     }

@@ -29,7 +29,7 @@ kotlin {
         macosArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "Signer"
+            baseName = "signer"
             xcf.add(this)
         }
     }
@@ -65,7 +65,7 @@ mavenPublishing {
 }
 
 frameworkBundlerConfig {
-    frameworkName.set("Signer")
+    frameworkName.set("signer")
     outputPath.set("$rootDir/XCFrameworkOutputs")
     versionName.set(version as String)
     frameworkType = com.prof18.kmpframeworkbundler.data.FrameworkType.XC_FRAMEWORK
