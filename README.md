@@ -282,6 +282,35 @@ class HotSigner: Signer {
 }
 ```
 
+### More Examples
+
+KMP can be hard to inferred directly. Especially extensions, static methods and companion objects. Here is a good example of an implementation for a signer using the HotSigner implementation previously developed.
+
+##### Kotlin 
+```kotlin
+val privateKey = "64 seed".decodeBase58().copyOfRange(0, 32)
+
+val k = SolanaEddsa.createKeypairFromSecretKey(privateKey)
+val signer = HotSigner(SolanaKeypair(k.publicKey, k.secretKey))
+```
+
+##### Swift 
+```swift 
+let decoded = try Base58Kt.decodeBase58("64 seed")
+let privateKey = KotlinByteArray(size: 32)
+
+for i in 0..<32 {
+    privateKey.set(index: Int32(i), value: decoded.get(index: Int32(i)))
+}
+
+let k = try await SolanaEddsa.companion.createKeypairFromSecretKey(secretKey: privateKey)
+
+let signer = HotSigner(keypair: SolanaKeypair(publicKey: k.publicKey, secretKey: k.secretKey))
+```
+
+Progress has to be made but implementing all the derivatives on booth platforms is possible. Feel free to share question related to how to use the sdks. This will improve the over all experience in every platform.
+
+
 ### License
 This project is licensed under the Metaplex License. See the [LICENSE](LICENSE.txt) file for details.
 
