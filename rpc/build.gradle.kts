@@ -33,9 +33,7 @@ kotlin {
             baseName = "rpc"
             xcf.add(this)
         }
-        dependencies{
-            implementation(libs.ktor.client.darwin)
-        }
+
     }
 
     sourceSets {
@@ -63,6 +61,18 @@ kotlin {
 
         val jvmMain by getting
         val jvmTest by getting
+
+        val iosMain by getting {
+            dependencies{
+                implementation(libs.ktor.client.darwin)
+            }
+        }
+
+        val macosMain by getting {
+            dependencies{
+                implementation(libs.ktor.client.darwin)
+            }
+        }
     }
 }
 
