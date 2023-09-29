@@ -94,6 +94,8 @@ or for specific module
 
 ```./gradlew solana:buildReleaseXCFramework```
 
+**Important:** API support callbacks and async/await. For the second **only** @MainActor scope is supported. Main Actor can be validated `Thread.current.isMainThread`.
+
 ### Usage
 
 #### RPC
@@ -282,13 +284,17 @@ class HotSigner: Signer {
 }
 ```
 
-### More Examples
+## More Examples
 
 KMP can be hard to inferred directly. Especially extensions, static methods and companion/shared objects. Here is a good example of an implementation for a signer using the HotSigner implementation previously developed.
 
+### Keypair and signers
+
+Generate a PublicKey from a Base58 Private key.
+
 ##### Kotlin 
 ```kotlin
-val privateKey = "64 seed".decodeBase58().copyOfRange(0, 32)
+val privateKey = "4Z7cXSyeFR8wNGMVXUE1TwtKn5D5Vu7FzEv69dokLv7KrQk7h6pu4LF8ZRR9yQBhc7uSM6RTTZtU1fmaxiNrxXrs".decodeBase58().copyOfRange(0, 32)
 
 val k = SolanaEddsa.createKeypairFromSecretKey(privateKey)
 val signer = HotSigner(SolanaKeypair(k.publicKey, k.secretKey))
@@ -296,14 +302,68 @@ val signer = HotSigner(SolanaKeypair(k.publicKey, k.secretKey))
 
 ##### Swift 
 ```swift 
-let decoded = try Base58Kt.decodeBase58("64 seed")
+let decoded = try Base58Kt.decodeBase58("4Z7cXSyeFR8wNGMVXUE1TwtKn5D5Vu7FzEv69dokLv7KrQk7h6pu4LF8ZRR9yQBhc7uSM6RTTZtU1fmaxiNrxXrs")
 let privateKey = decoded.toData().subdata(in: 0..<32)
 let k = try await SolanaEddsa.shared.createKeypairFromSecretKey(secretKey: NSDataByteArrayKt.toByteArray(privateKey))
 
 let signer = HotSigner(keypair: SolanaKeypair(publicKey: k.publicKey, secretKey: k.secretKey))
 ```
 
-Progress has to be made but implementing all the derivatives on booth platforms is possible. Feel free to share question related to how to use the sdks. This will improve the over all experience in every platform.
+### Memo transaction
+
+Write to a memo using the Memo program.
+
+```kotlin
+// Configure RPC
+val rpcUrl = "https://api.devnet.solana.com/"
+val rpc = RPC(rpcUrl)
+
+val blockhash = rpc.getLatestBlockhash(null)
+val memo = "Other Test memo"
+val transaction: Transaction = SolanaTransactionBuilder()
+    .addInstruction(
+        writeUtf8(
+                signer.publicKey,
+                memo
+            )
+        )
+    .setRecentBlockHash(blockhash.blockhash)
+    .setSigners(listOf(signer))
+    .build()
+
+val serializedTransaction = transaction.serialize()
+val transactionSignature = rpc.sendTransaction(serializedTransaction, null)
+```
+
+```swift
+// Configure RPC
+let rpcURL = "https://api.devnet.solana.com/"
+let rpc = RPC(
+    rpcUrl: self.rpcURL,
+    httpNetworkDriver: NetworkDriver(httpClient: NetworkingClientKt.NetworkClient())
+)
+
+let blockHash = try await rpc!.getLatestBlockhash(configuration: nil)
+let memo = "Other Test memo"
+let transaction = try await SolanaTransactionBuilder()
+    .addInstruction(
+        transactionInstruction: MemoProgram.shared.writeUtf8(
+            account: signer.publicKey,
+            memo: memo
+        )
+    )
+    .setRecentBlockHash(recentBlockHash: blockHash.blockhash)
+    .setSigners(signers: [signer])
+    .build()
+
+let serializedTransaction = try await transaction.serialize(
+    config: SerializeConfig(requireAllSignatures: true, verifySignatures: true)
+)
+let transactionSignature = try await rpc!.sendTransaction(
+    transaction: serializedTransaction,
+    configuration: nil
+)
+```
 
 
 ### License
