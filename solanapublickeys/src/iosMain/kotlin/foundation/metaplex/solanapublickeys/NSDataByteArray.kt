@@ -1,4 +1,4 @@
-package foundation.metaplex.solana
+package foundation.metaplex.solanapublickeys
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
