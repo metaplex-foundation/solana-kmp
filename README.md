@@ -365,6 +365,31 @@ let transactionSignature = try await rpc!.sendTransaction(
 )
 ```
 
+### Read API
+
+Read Api `getAssetsByOwner` example
+
+```kotlin
+val randomPublicKey = PublicKey("Geh5Ss5knQGym81toYGXDbH3MFU2JCMK7E4QyeBHor1b")
+        val assets = readApiDecorator.getAssetsByOwner(GetAssetsByOwnerRpcInput(randomPublicKey))
+        assertTrue { assets.total > 0 }
+```
+
+```swift
+let decorator = ReadApiDecorator(rpcUrl: self.rpcURL, httpNetworkDriver: driver!)
+let randomPublicKey = PublicKey(base58String: "Geh5Ss5knQGym81toYGXDbH3MFU2JCMK7E4QyeBHor1b")
+let assets = try await decorator.getAssetsByOwner(
+    input: GetAssetsByOwnerRpcInput(
+        ownerAddress: randomPublicKey, 
+        page: 1, 
+        limit: nil, 
+        before: nil, 
+        after: nil, 
+        sortBy: nil
+    )
+)
+assert(assets.total > 0)
+```
 
 ### License
 This project is licensed under the Metaplex License. See the [LICENSE](LICENSE.txt) file for details.
