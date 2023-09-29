@@ -273,7 +273,7 @@ class HotSigner: Signer {
         self.keypair = keypair
     }
     func signMessage(message: KotlinByteArray) async throws -> KotlinByteArray {
-        return try await SolanaEddsa.companion.sign(message: message, keypair: self.keypair)
+        return try await SolanaEddsa.shared.sign(message: message, keypair: self.keypair)
     }
     
     var publicKey: PublicKey {
@@ -284,7 +284,7 @@ class HotSigner: Signer {
 
 ### More Examples
 
-KMP can be hard to inferred directly. Especially extensions, static methods and companion objects. Here is a good example of an implementation for a signer using the HotSigner implementation previously developed.
+KMP can be hard to inferred directly. Especially extensions, static methods and companion/shared objects. Here is a good example of an implementation for a signer using the HotSigner implementation previously developed.
 
 ##### Kotlin 
 ```kotlin
@@ -297,13 +297,8 @@ val signer = HotSigner(SolanaKeypair(k.publicKey, k.secretKey))
 ##### Swift 
 ```swift 
 let decoded = try Base58Kt.decodeBase58("64 seed")
-let privateKey = KotlinByteArray(size: 32)
-
-for i in 0..<32 {
-    privateKey.set(index: Int32(i), value: decoded.get(index: Int32(i)))
-}
-
-let k = try await SolanaEddsa.companion.createKeypairFromSecretKey(secretKey: privateKey)
+let privateKey = decoded.toData().subdata(in: 0..<32)
+let k = try await SolanaEddsa.shared.createKeypairFromSecretKey(secretKey: NSDataByteArrayKt.toByteArray(privateKey))
 
 let signer = HotSigner(keypair: SolanaKeypair(publicKey: k.publicKey, secretKey: k.secretKey))
 ```
