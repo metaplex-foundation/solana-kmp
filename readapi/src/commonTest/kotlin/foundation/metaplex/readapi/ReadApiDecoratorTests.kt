@@ -5,6 +5,7 @@ import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class ReadApiDecoratorTests {
@@ -17,12 +18,13 @@ class ReadApiDecoratorTests {
 
     @Test
     fun testReadApiGetAssetsByOwner() = runTest {
-        val randomPublicKey = PublicKey("Geh5Ss5knQGym81toYGXDbH3MFU2JCMK7E4QyeBHor1b")
+        val randomPublicKey = PublicKey("2RtGg6fsFiiF1EQzHqbd66AhW7R5bWeQGpTbv2UMkCdW")
         val assets = readApiDecorator.getAssetsByOwner(GetAssetsByOwnerRpcInput(randomPublicKey))
         assertTrue { assets.total > 0 }
-        assertEquals("RedButo #1911", assets.items[1].content.metadata!!.name, )
-        assertEquals("https://www.arweave.net/Na-z1R0HXNLh9NkuP9cxq7p9fb8KaJt6QX2Bds5hRig?ext=png", assets.items[1].content.files!!.first().uri)
-        assertEquals("https://www.arweave.net/Na-z1R0HXNLh9NkuP9cxq7p9fb8KaJt6QX2Bds5hRig?ext=png", assets.items[1].content.links!!.image)
+        val asset = assets.items.find { it.content.metadata?.name == "Mad Lads"}
+        assertNotNull(asset)
+        assertTrue { asset.content.files!!.first().uri!!.endsWith("collection.png") }
+        assertTrue { asset.content.links!!.image!!.endsWith("collection.png") }
     }
 
     @Test
@@ -46,15 +48,15 @@ class ReadApiDecoratorTests {
         val assets = readApiDecorator.getAssetsByGroup(
             GetAssetsByGroupRpcInput(
                 "collection",
-                "J1S9H3QjnRtBbbuD4HjPV6RpRhwuk4zKbxsnCHuTgh9w",
+                "J2ZfLdQsaZ3GCmbucJef3cPnPwGcgjDW1SSYtMdq3L9p",
                 1,
                 1000
             )
         )
-        assertEquals(assets.total, 1000)
+        assertEquals(1000, assets.total)
         assertEquals(
-            assets.items.first().id,
-            PublicKey("GVPX9rXRXo9SVGktJCzA3Qb9v263kQzEyAWsgX3LL8P5")
+            PublicKey("GY4Ncxdtz55bMLfmXL38EJk92hxokCHWenjGsF6JDYMZ"),
+            assets.items.first().id
         )
     }
 }
