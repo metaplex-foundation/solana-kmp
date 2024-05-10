@@ -41,7 +41,7 @@ class HotSigner(private val keyPair: Keypair) : Signer {
 
 
 
-class BubblegumTest {
+class BubblegumIntegTest {
 
     companion object {
 

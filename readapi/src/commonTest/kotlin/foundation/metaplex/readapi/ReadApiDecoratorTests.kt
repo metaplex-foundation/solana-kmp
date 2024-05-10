@@ -9,7 +9,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
-class ReadApiDecoratorTests {
+class ReadApiDecoratorIntegTests {
     private val testingTimeout = 30.seconds
     private var rpcUrl: String = "https://api.mainnet-beta.solana.com"
 

@@ -13,3 +13,14 @@ plugins {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
+
+subprojects.forEach { project ->
+    project.afterEvaluate {
+        project.tasks.filterIsInstance<Test>().forEach { testTask ->
+            if (!project.hasProperty("includeIntegrationTests") ||
+                project.property("includeIntegrationTests") == false) {
+                testTask.exclude("**/*IntegTest*")
+            }
+        }
+    }
+}
