@@ -40,6 +40,7 @@ kotlin {
                 implementation(project(mapOf("path" to ":signer")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
                 implementation(libs.crypto)
+                implementation(libs.web3core)
             }
         }
         val commonTest by getting {

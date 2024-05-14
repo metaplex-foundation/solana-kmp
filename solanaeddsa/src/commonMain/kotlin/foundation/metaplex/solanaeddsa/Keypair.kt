@@ -1,7 +1,8 @@
 package foundation.metaplex.solanaeddsa
 
-import com.metaplex.signer.Signer
-import foundation.metaplex.solanapublickeys.PublicKey
+import com.solana.publickey.PublicKey
+import com.solana.publickey.SolanaPublicKey
+import com.solana.signer.Signer
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
@@ -26,7 +27,7 @@ interface Keypair {
 @OptIn(ExperimentalObjCName::class)
 @ObjCName("SolanaKeypair")
 internal class SolanaKeypair(
-    override val publicKey: PublicKey,
+    override val publicKey: SolanaPublicKey,
     override val secretKey: ByteArray
 ) : Keypair
 

@@ -1,11 +1,11 @@
 package foundation.metaplex.solanaeddsa
 
+import com.solana.publickey.PublicKey
+import com.solana.publickey.SolanaPublicKey
 import diglol.crypto.Ed25519
 import foundation.metaplex.solanapublickeys.Pda
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
-
 
 /**
  * The `SolanaEddsa` object provides utility functions for working with Ed25519 cryptographic operations
@@ -21,7 +21,7 @@ object SolanaEddsa {
      */
     suspend fun generateKeypair(): Keypair {
         val keypair = Ed25519.generateKeyPair()
-        return SolanaKeypair(PublicKey(keypair.publicKey), keypair.privateKey)
+        return SolanaKeypair(SolanaPublicKey(keypair.publicKey), keypair.privateKey)
     }
 
     /**
@@ -32,7 +32,7 @@ object SolanaEddsa {
      */
     suspend fun createKeypairFromSecretKey(secretKey: ByteArray): Keypair {
         val keypair = Ed25519.generateKeyPair(secretKey)
-        return SolanaKeypair(PublicKey(keypair.publicKey), keypair.privateKey)
+        return SolanaKeypair(SolanaPublicKey(keypair.publicKey), keypair.privateKey)
     }
 
     /**
@@ -56,9 +56,9 @@ object SolanaEddsa {
      * @return `true` if the public key is on the curve; `false` otherwise.
      */
     suspend fun findPda(
-        programId: PublicKey,
+        programId: SolanaPublicKey,
         seeds: Array<ByteArray>
-    ): Pda = PublicKey.findProgramAddress(seeds.toList(), programId)
+    ): Pda = foundation.metaplex.solanapublickeys.PublicKey.findProgramAddress(seeds.toList(), programId)
 
 
     /**
@@ -82,5 +82,5 @@ object SolanaEddsa {
         message: ByteArray,
         signature: ByteArray,
         publicKey: PublicKey
-    ): Boolean = Ed25519.verify(signature, publicKey.toByteArray(), message)
+    ): Boolean = Ed25519.verify(signature, publicKey.bytes, message)
 }
