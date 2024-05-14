@@ -1,9 +1,9 @@
 package foundation.metaplex.readapi
 
-import com.funkatronics.networking.HttpNetworkDriver
-import com.funkatronics.networking.Rpc20Driver
-import com.funkatronics.rpccore.JsonRpc20Request
-import com.funkatronics.rpccore.get
+import com.solana.networking.HttpNetworkDriver
+import com.solana.networking.Rpc20Driver
+import com.solana.rpccore.JsonRpc20Request
+import com.solana.rpccore.get
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.json.Json
 import kotlin.experimental.ExperimentalObjCName
