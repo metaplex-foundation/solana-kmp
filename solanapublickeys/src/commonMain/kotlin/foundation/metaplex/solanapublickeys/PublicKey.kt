@@ -61,8 +61,11 @@ data class PublicKey(val publicKeyBytes: ByteArray) : SolanaPublicKey(publicKeyB
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null) return false
-        val person = other as PublicKey
-        return equals(person)
+        if (!super.equals(other)) return false
+
+        other as PublicKey
+
+        return publicKeyBytes.contentEquals(other.publicKeyBytes)
     }
 
     override fun toString(): String = toBase58()
