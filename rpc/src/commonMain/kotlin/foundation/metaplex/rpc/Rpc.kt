@@ -1,12 +1,11 @@
 package foundation.metaplex.rpc
 
-import com.funkatronics.networking.HttpNetworkDriver
-import com.funkatronics.networking.Rpc20Driver
-import com.funkatronics.rpccore.JsonRpc20Request
-import com.funkatronics.rpccore.get
+import com.solana.networking.HttpNetworkDriver
+import com.solana.networking.Rpc20Driver
+import com.solana.rpccore.JsonRpc20Request
+import com.solana.rpccore.get
 import foundation.metaplex.rpc.networking.NetworkDriver
 import foundation.metaplex.rpc.serializers.SolanaResponseSerializer
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
@@ -21,6 +20,8 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.native.ObjCName
 import kotlin.random.Random
 import kotlin.random.nextUInt
+
+import com.solana.publickey.SolanaPublicKey as PublicKey
 
 /**
  * Represents an RPC client for making remote procedure calls to a specified RPC server.
@@ -67,7 +68,7 @@ class RPC(
     ): Account<T>? {
         // Create a list to hold JSON elements for RPC request parameters
         val params: MutableList<JsonElement> = mutableListOf()
-        params.add(json.encodeToJsonElement(publicKey.toBase58()))
+        params.add(json.encodeToJsonElement(publicKey.base58()))
 
         // Use the provided configuration or create a default one
         val fixedConfiguration = configuration ?: RpcGetAccountInfoConfiguration()
@@ -120,7 +121,7 @@ class RPC(
         serializer: KSerializer<T>
     ): List<Account<T>?>? {
         val params: MutableList<JsonElement> = mutableListOf()
-        params.add(json.encodeToJsonElement(publicKeys.map { it.toBase58() }))
+        params.add(json.encodeToJsonElement(publicKeys.map { it.base58() }))
 
         val fixedConfiguration = configuration ?: RpcGetMultipleAccountsConfiguration()
         params.add(json.encodeToJsonElement(RpcGetMultipleAccountsConfiguration.serializer(), fixedConfiguration))
@@ -179,7 +180,7 @@ class RPC(
     ): List<Account<T>?>? {
         // Create a list to hold JSON elements for RPC request parameters
         val params: MutableList<JsonElement> = mutableListOf()
-        params.add(json.encodeToJsonElement(programId.toBase58()))
+        params.add(json.encodeToJsonElement(programId.base58()))
 
         // Use the provided configuration or create a default one
         val fixedConfiguration = configuration ?: RpcGetProgramAccountsConfiguration()
@@ -380,7 +381,7 @@ class RPC(
         configuration: RpcGetBalanceConfiguration?): Long {
         // Create a list to hold JSON elements for RPC request parameters
         val params: MutableList<JsonElement> = mutableListOf()
-        params.add(json.encodeToJsonElement(publicKey.toBase58()))
+        params.add(json.encodeToJsonElement(publicKey.base58()))
         // Use the provided configuration or create a default one
         configuration?.let {
             params.add(json.encodeToJsonElement(RpcGetBalanceConfiguration.serializer(), it))
@@ -405,7 +406,7 @@ class RPC(
      */
     override suspend fun requestAirdrop(configuration: RpcRequestAirdropConfiguration): TransactionSignature {
         val params: MutableList<JsonElement> = mutableListOf()
-        params.add(json.encodeToJsonElement(configuration.publicKey.toBase58()))
+        params.add(json.encodeToJsonElement(configuration.publicKey.base58()))
         params.add(json.encodeToJsonElement(configuration.lamports.basisPoints.longValue()))
         configuration.commitment?.let {
             params.add(json.encodeToJsonElement(configuration.commitment.name))

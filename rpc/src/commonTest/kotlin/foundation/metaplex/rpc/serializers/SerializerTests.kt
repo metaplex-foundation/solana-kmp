@@ -1,7 +1,7 @@
 package foundation.metaplex.rpc.serializers
 
 import com.funkatronics.kborsh.Borsh
-import com.funkatronics.rpccore.Rpc20Response
+import com.solana.rpccore.Rpc20Response
 import foundation.metaplex.rpc.Account
 import foundation.metaplex.rpc.AccountInfoSerializer
 import foundation.metaplex.rpc.RpcGetAccountInfoConfiguration

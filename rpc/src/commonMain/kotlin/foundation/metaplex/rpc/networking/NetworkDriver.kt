@@ -1,7 +1,7 @@
 package foundation.metaplex.rpc.networking
 
-import com.funkatronics.networking.HttpNetworkDriver
-import com.funkatronics.networking.HttpRequest
+import com.solana.networking.HttpNetworkDriver
+import com.solana.networking.HttpRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody

@@ -1,6 +1,6 @@
 package foundation.metaplex.rpc.networking
 
-import com.funkatronics.networking.HttpRequest
+import com.solana.networking.HttpRequest
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
