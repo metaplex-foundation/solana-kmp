@@ -2,6 +2,8 @@
 package foundation.metaplex.mplbubblegum
 
 import com.metaplex.signer.Signer
+import com.solana.publickey.PublicKey
+import com.solana.publickey.SolanaPublicKey
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.mplbubblegum.generated.bubblegum.BubblegumInstructions
 import foundation.metaplex.mplbubblegum.generated.bubblegum.DecompressableState
@@ -19,7 +21,6 @@ import foundation.metaplex.rpc.serializers.BorshAsBase64JsonArraySerializer
 import foundation.metaplex.solana.transactions.SolanaTransactionBuilder
 import foundation.metaplex.solanaeddsa.Keypair
 import foundation.metaplex.solanaeddsa.SolanaEddsa
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,13 +29,15 @@ import kotlin.test.assertNotNull
 private val rpcUrl = "https://api.devnet.solana.com/"
 val rpc = RPC(rpcUrl)
 
+fun SolanaPublicKey(base58: String) = SolanaPublicKey.from(base58)
+
 class SolanaKeypair(
     override val publicKey: PublicKey,
     override val secretKey: ByteArray
 ) : Keypair
 
 class HotSigner(private val keyPair: Keypair) : Signer {
-    override val publicKey: PublicKey = keyPair.publicKey
+    override val publicKey = keyPair.publicKey
     override suspend fun signMessage(message: ByteArray): ByteArray = SolanaEddsa.sign(message, keyPair)
 }
 
@@ -61,8 +64,8 @@ class BubblegumIntegTest {
         val merkleTree = HotSigner(SolanaKeypair(merkleTreeKeypair.publicKey, merkleTreeKeypair.secretKey))
 
         val treeAuthority = SolanaEddsa.findPda(
-            PublicKey("BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"),
-            arrayOf(merkleTree.publicKey.toByteArray())
+            SolanaPublicKey("BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"),
+            arrayOf(merkleTree.publicKey.bytes)
         )
 
         val tree = SolanaTransactionBuilder()
@@ -72,7 +75,7 @@ class BubblegumIntegTest {
                     merkleTree.publicKey,
                     lamports.toLong(),
                     31800u.toLong(),
-                    PublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK")
+                    SolanaPublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK")
                 )
             )
             .addInstruction(
@@ -81,8 +84,8 @@ class BubblegumIntegTest {
                     merkleTree.publicKey,
                     signer().publicKey,
                     signer().publicKey,
-                    PublicKey("noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"),
-                    PublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"),
+                    SolanaPublicKey("noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"),
+                    SolanaPublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"),
                     PROGRAM_ID,
                     14u,
                     64u,
@@ -101,12 +104,12 @@ class BubblegumIntegTest {
 
     @Test
     fun testFetchTreeConfig()= runTest {
-        val treeConfig = rpc.getAccountInfo(PublicKey("CYqvyie3xPueVu4WuoRMWW2hQHgmKfEHgvpssr52CpTo"), null,
+        val treeConfig = rpc.getAccountInfo(SolanaPublicKey("CYqvyie3xPueVu4WuoRMWW2hQHgmKfEHgvpssr52CpTo"), null,
             BorshAsBase64JsonArraySerializer(AnchorAccountSerializer("TreeConfig", TreeConfig.serializer()))
         )
         assertNotNull(treeConfig)
-        assertEquals(treeConfig.data!!.treeDelegate, PublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo"))
-        assertEquals(treeConfig.data!!.treeCreator, PublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo"))
+        assertEquals(treeConfig.data!!.treeDelegate, SolanaPublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo"))
+        assertEquals(treeConfig.data!!.treeCreator, SolanaPublicKey("QqCCvshxtqMAL2CVALqiJB7uEeE5mjSPsseQdDzsRUo"))
         assertEquals(treeConfig.data!!.isPublic, false)
         assertEquals(treeConfig.data!!.totalMintCapacity, 16384u)
         assertEquals(treeConfig.data!!.numMinted, 0u)
@@ -115,14 +118,14 @@ class BubblegumIntegTest {
 
     @Test
     fun testFetchEmptyMerkleTree()= runTest {
-        val merkleTree = rpc.getAccountInfo(PublicKey("CxYcCxbSP6JGTg6y22hh8cx5Mpm6UCmxKi8SuzFXKAb1"), null,
+        val merkleTree = rpc.getAccountInfo(SolanaPublicKey("CxYcCxbSP6JGTg6y22hh8cx5Mpm6UCmxKi8SuzFXKAb1"), null,
             BorshAsBase64JsonArraySerializer( MerkleTree.serializer())
         )
         assertNotNull(merkleTree)
         assertEquals(merkleTree.data!!.discriminator, CompressionAccountType.ConcurrentMerkleTree)
         assertEquals(merkleTree.data!!.treeHeader.maxBufferSize, 64u)
         assertEquals(merkleTree.data!!.treeHeader.maxDepth, 14u)
-        assertEquals(merkleTree.data!!.treeHeader.authority, PublicKey("BhtGND8r6VjjXnxQyVpi4av1hcaX5cPEU6f22G7W8cKT"))
+        assertEquals(merkleTree.data!!.treeHeader.authority, SolanaPublicKey("BhtGND8r6VjjXnxQyVpi4av1hcaX5cPEU6f22G7W8cKT"))
         assertEquals(merkleTree.data!!.treeHeader.creationSlot, 244081182UL)
         assertEquals(merkleTree.data!!.treeHeader.paddingA, 0)
         assertEquals(merkleTree.data!!.treeHeader.paddingB, 0)
@@ -134,26 +137,26 @@ class BubblegumIntegTest {
         assertEquals(merkleTree.data!!.tree.sequenceNumber, 0u)
         assertEquals(merkleTree.data!!.tree.activeIndex, 0u)
         assertEquals(merkleTree.data!!.tree.bufferSize, 1u)
-        assertEquals(merkleTree.data!!.tree.changeLogs.first().root, PublicKey("7DiCkBhs5HQLPEsKY6EjfNd3oBswnfRk9UAZcHqczL7m"))
+        assertEquals(merkleTree.data!!.tree.changeLogs.first().root, SolanaPublicKey("7DiCkBhs5HQLPEsKY6EjfNd3oBswnfRk9UAZcHqczL7m"))
         assertEquals(merkleTree.data!!.tree.changeLogs.first().pathNodes.size, 1)
-        assertEquals(merkleTree.data!!.tree.changeLogs.first().pathNodes.first(), PublicKey("11111111111111111111111111111111"))
+        assertEquals(merkleTree.data!!.tree.changeLogs.first().pathNodes.first(), SolanaPublicKey("11111111111111111111111111111111"))
         assertEquals(merkleTree.data!!.tree.changeLogs.first().index, 0u)
 
         assertEquals(merkleTree.data!!.tree.rightMostPath.proof.size, 1)
-        assertEquals(merkleTree.data!!.tree.rightMostPath.proof.first(), PublicKey("91QHiAzosmGSwqG6CBE8cKz1LgLu5eszKoqmnBGMUa4g"))
+        assertEquals(merkleTree.data!!.tree.rightMostPath.proof.first(), SolanaPublicKey("91QHiAzosmGSwqG6CBE8cKz1LgLu5eszKoqmnBGMUa4g"))
         assertEquals(merkleTree.data!!.tree.rightMostPath.index, 0u)
     }
 
     @Test
     fun testFetchMerkleTreeWithMint()= runTest {
-        val merkleTree = rpc.getAccountInfo(PublicKey("ALgwuCkX8EKiNR8Hr6Zpay6zvkHnFDu1spWS7R3qR1y1"), null,
+        val merkleTree = rpc.getAccountInfo(SolanaPublicKey("ALgwuCkX8EKiNR8Hr6Zpay6zvkHnFDu1spWS7R3qR1y1"), null,
             BorshAsBase64JsonArraySerializer( MerkleTree.serializer())
         )
         assertNotNull(merkleTree)
         assertEquals(merkleTree.data!!.discriminator, CompressionAccountType.ConcurrentMerkleTree)
         assertEquals(merkleTree.data!!.treeHeader.maxBufferSize, 64u)
         assertEquals(merkleTree.data!!.treeHeader.maxDepth, 14u)
-        assertEquals(merkleTree.data!!.treeHeader.authority, PublicKey("6ifW4aVxR7B1QvrYD3WyEDsuzYvkU4mWo3GGdTbYtnb4"))
+        assertEquals(merkleTree.data!!.treeHeader.authority, SolanaPublicKey("6ifW4aVxR7B1QvrYD3WyEDsuzYvkU4mWo3GGdTbYtnb4"))
         assertEquals(merkleTree.data!!.treeHeader.creationSlot, 244284165UL)
         assertEquals(merkleTree.data!!.treeHeader.paddingA, 0)
         assertEquals(merkleTree.data!!.treeHeader.paddingB, 0)
@@ -165,13 +168,13 @@ class BubblegumIntegTest {
         assertEquals(merkleTree.data!!.tree.sequenceNumber, 1u)
         assertEquals(merkleTree.data!!.tree.activeIndex, 1u)
         assertEquals(merkleTree.data!!.tree.bufferSize, 2u)
-        assertEquals(merkleTree.data!!.tree.changeLogs.first().root, PublicKey("7DiCkBhs5HQLPEsKY6EjfNd3oBswnfRk9UAZcHqczL7m"))
+        assertEquals(merkleTree.data!!.tree.changeLogs.first().root, SolanaPublicKey("7DiCkBhs5HQLPEsKY6EjfNd3oBswnfRk9UAZcHqczL7m"))
         assertEquals(merkleTree.data!!.tree.changeLogs.first().pathNodes.size, 2)
-        assertEquals(merkleTree.data!!.tree.changeLogs.first().pathNodes.first(), PublicKey("11111111111111111111111111111111"))
+        assertEquals(merkleTree.data!!.tree.changeLogs.first().pathNodes.first(), SolanaPublicKey("11111111111111111111111111111111"))
         assertEquals(merkleTree.data!!.tree.changeLogs.first().index, 0u)
 
         assertEquals(merkleTree.data!!.tree.rightMostPath.proof.size, 2)
-        assertEquals(merkleTree.data!!.tree.rightMostPath.proof.first(), PublicKey("s6AF7Jimxi6f2FDq7KNr3Sfmmg2pdWNyMbYHcCj644X"))
+        assertEquals(merkleTree.data!!.tree.rightMostPath.proof.first(), SolanaPublicKey("s6AF7Jimxi6f2FDq7KNr3Sfmmg2pdWNyMbYHcCj644X"))
         assertEquals(merkleTree.data!!.tree.rightMostPath.index, 0u)
     }
 
@@ -184,8 +187,8 @@ class BubblegumIntegTest {
         val merkleTree = HotSigner(SolanaKeypair(merkleTreeKeypair.publicKey, merkleTreeKeypair.secretKey))
 
         val treeAuthority = SolanaEddsa.findPda(
-            PublicKey("BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"),
-            arrayOf(merkleTree.publicKey.toByteArray())
+            SolanaPublicKey.from("BGUMAp9Gq7iTEuizy4pqaxsTyUCBK68MDfK752saRPUY"),
+            arrayOf(merkleTree.publicKey.bytes)
         )
 
         val metadata = MetadataArgs(
@@ -210,7 +213,7 @@ class BubblegumIntegTest {
                     merkleTree.publicKey,
                     lamports.toLong(),
                     31800u.toLong(),
-                    PublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK")
+                    SolanaPublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK")
                 )
             )
             .addInstruction(
@@ -219,8 +222,8 @@ class BubblegumIntegTest {
                     merkleTree.publicKey,
                     signer().publicKey,
                     signer().publicKey,
-                    PublicKey("noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"),
-                    PublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"),
+                    SolanaPublicKey("noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"),
+                    SolanaPublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"),
                     PROGRAM_ID,
                     14u,
                     64u,
@@ -235,8 +238,8 @@ class BubblegumIntegTest {
                     merkleTree.publicKey,
                     signer().publicKey,
                     signer().publicKey,
-                    PublicKey("noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"),
-                    PublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"),
+                    SolanaPublicKey("noopb9bkMVfRPU8AsbpTUg8AQkHtKwMYZiFUjNRtMmV"),
+                    SolanaPublicKey("cmtDvXumGCrqC1Age74AVPhSRVXJMd8PJS91L8KbNCK"),
                     PROGRAM_ID,
                     metadata
                 )
