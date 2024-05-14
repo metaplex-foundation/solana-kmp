@@ -30,7 +30,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Test
-        run: ./gradlew jvmTest -Ptesting.rpc.defaultUrl=$ORG_GRADLE_PROJECT_solanarpc
+        run: ./gradlew jvmTest -Ptesting.rpc.defaultUrl=$ORG_GRADLE_PROJECT_solanarpc -PexcludeIntegrationTests
         env:
           ORG_GRADLE_PROJECT_solanarpc: ${{ secrets.SOLANA_RPC_URL }}
 

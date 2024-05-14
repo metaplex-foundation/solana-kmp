@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
+
 buildscript {
     dependencies {
         classpath(libs.gradle)
@@ -17,8 +19,13 @@ tasks.register("clean", Delete::class) {
 subprojects.forEach { project ->
     project.afterEvaluate {
         project.tasks.filterIsInstance<Test>().forEach { testTask ->
-            if (!project.hasProperty("includeIntegrationTests") ||
-                project.property("includeIntegrationTests") == false) {
+            val includeIntegrationTests = if (project.hasProperty("includeIntegrationTests")) {
+                project.property("includeIntegrationTests") != "false"
+            } else if (project.hasProperty("excludeIntegrationTests")) {
+                project.property("excludeIntegrationTests") == "false"
+            } else true
+
+            if (!includeIntegrationTests) {
                 testTask.exclude("**/*IntegTest*")
             }
         }
