@@ -1,6 +1,6 @@
 package foundation.metaplex.solana.transactions
 
-import foundation.metaplex.solanapublickeys.PublicKey
+import com.solana.publickey.PublicKey
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 

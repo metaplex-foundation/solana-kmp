@@ -1,6 +1,8 @@
 package foundation.metaplex.solana
 
 import com.metaplex.signer.Signer
+import com.solana.publickey.PublicKey
+import com.solana.publickey.SolanaPublicKey
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.rpc.RPC
 import foundation.metaplex.solanaeddsa.SolanaEddsa
@@ -10,7 +12,6 @@ import foundation.metaplex.solana.transactions.SolanaTransactionBuilder
 import foundation.metaplex.solana.transactions.Transaction
 import foundation.metaplex.solana.transactions.TransactionInstruction
 import foundation.metaplex.solanaeddsa.Keypair
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.coroutines.test.runTest
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -106,12 +107,12 @@ class HotSigner(private val keyPair: Keypair) : Signer {
 }
 
 object MemoProgram {
-    private val PROGRAM_ID = PublicKey("Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
+    private val PROGRAM_ID = SolanaPublicKey.from("Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo")
     fun writeUtf8(account: PublicKey, memo: String): TransactionInstruction {
         // Add signer to AccountMeta keys
         val keys = listOf(
             AccountMeta(
-                account,
+                SolanaPublicKey(account.bytes),
                 true,
                 false
             )

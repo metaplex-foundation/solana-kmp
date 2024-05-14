@@ -2,12 +2,12 @@ package foundation.metaplex.solana.transactions
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
-import com.metaplex.signer.Signer
+import com.solana.publickey.PublicKey
+import com.solana.signer.Signer
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
 import foundation.metaplex.solana.util.Shortvec
 import foundation.metaplex.solanaeddsa.SolanaEddsa
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
@@ -102,7 +102,7 @@ class SolanaTransaction: Transaction {
     private suspend fun partialSign(message: Message, signers: List<Signer>) {
         val signData = message.serialize()
         signers.forEach { signer ->
-            val signature = signer.signMessage(signData)
+            val signature = signer.signPayload(signData)
             _addSignature(signer.publicKey, signature)
         }
     }
@@ -116,7 +116,7 @@ class SolanaTransaction: Transaction {
         require(signature.count() == 64)
 
         val index = this.signatures.indexOfFirst { sigpair ->
-            pubkey.equals(sigpair.publicKey)
+            pubkey.bytes.contentEquals(sigpair.publicKey.bytes)
         }
         if (index < 0) {
             throw Error("unknown signer: $pubkey")
@@ -212,8 +212,8 @@ class SolanaTransaction: Transaction {
         // Cull duplicate account metas
         val uniqueMetas = mutableListOf<AccountMeta>()
         for (accountMeta in accountMetas) {
-            val pubkeyString = accountMeta.publicKey.toBase58()
-            val uniqueIndex = uniqueMetas.indexOfFirst { it.publicKey.toBase58() == pubkeyString }
+            val pubkeyString = accountMeta.publicKey.bytes.encodeToBase58String()
+            val uniqueIndex = uniqueMetas.indexOfFirst { it.publicKey.bytes.encodeToBase58String() == pubkeyString }
             if (uniqueIndex > -1) {
                 uniqueMetas[uniqueIndex].isWritable =
                     uniqueMetas[uniqueIndex].isWritable || accountMeta.isWritable
@@ -233,7 +233,7 @@ class SolanaTransaction: Transaction {
                 return@sortWith if (x.isWritable) -1 else 1
             }
             // Otherwise, sort by pubkey, stringwise.
-            return@sortWith x.publicKey.toBase58().compareTo(y.publicKey.toBase58())
+            return@sortWith x.publicKey.string().compareTo(y.publicKey.string())
         }
 
         // Move fee payer to the front
