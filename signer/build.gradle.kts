@@ -38,6 +38,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(mapOf("path" to ":solanapublickeys")))
+                implementation(libs.web3core)
             }
         }
         val commonTest by getting {
