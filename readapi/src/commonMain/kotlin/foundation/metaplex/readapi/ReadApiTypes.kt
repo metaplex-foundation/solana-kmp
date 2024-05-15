@@ -3,6 +3,7 @@ package foundation.metaplex.readapi
 import foundation.metaplex.rpc.serializers.PublicKeyAsStringSerializer
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.*
 
 @Serializable
 data class ReadApiAssetInterface(val value: String)
@@ -46,7 +47,7 @@ data class ReadApiAssetCompression(
     @Serializable(with = PublicKeyAsStringSerializer::class) val dataHash: PublicKey? = null,
     @Serializable(with = PublicKeyAsStringSerializer::class) val creatorHash: PublicKey? = null,
     @Serializable(with = PublicKeyAsStringSerializer::class) val assetHash: PublicKey? = null,
-    @Serializable(with = PublicKeyAsStringSerializer::class) val tree: PublicKey,
+    @Serializable(with = PublicKeyAsStringSerializer::class) val tree: PublicKey? = null,
     val seq: Int,
     val leafId: Int? = null
 )
@@ -143,8 +144,16 @@ data class ReadApiAsset(
     // val supply: ReadApiAssetSupply,
     val creators: List<ReadApiAssetCreator>,
     val grouping: List<ReadApiAssetGrouping>,
-    val compression: ReadApiAssetCompression
+    @Serializable(with = ReadApiAssetCompressionEmptyStringWorkaround::class) val compression: ReadApiAssetCompression
 )
+
+object ReadApiAssetCompressionEmptyStringWorkaround
+    : JsonTransformingSerializer<ReadApiAssetCompression>(ReadApiAssetCompression.serializer()) {
+    override fun transformDeserialize(element: JsonElement): JsonElement {
+        return if (element.toString().contains("\"\""))
+            JsonObject(element.jsonObject.filterValues { it.toString() != "\"\"" }) else element
+    }
+}
 
 @Serializable
 data class ReadApiAssetList(
