@@ -57,7 +57,7 @@ class ReadApiDecoratorIntegTests {
         )
         assertEquals(1000, assets.total)
         assertEquals(
-            PublicKey("GY4Ncxdtz55bMLfmXL38EJk92hxokCHWenjGsF6JDYMZ"),
+            PublicKey("JEAAuQNfGk1NsnCLAQo8GYDFJibJVn8NVxwbujzcUk1K"),
             assets.items.first().id
         )
     }

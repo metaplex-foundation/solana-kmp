@@ -11,6 +11,7 @@ import com.funkatronics.kborsh.BorshDecoder
 import com.funkatronics.kborsh.BorshEncoder
 import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.ByteArraySerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
@@ -78,5 +79,8 @@ object PublicKeyAsStringSerializer : KSerializer<PublicKey> {
      * @return The deserialized PublicKey object.
      * @throws SerializationException if the input string cannot be parsed as a PublicKey.
      */
-    override fun deserialize(decoder: Decoder): PublicKey = PublicKey(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): PublicKey = decoder.decodeString().let {
+        if (it.isEmpty()) throw SerializationException("received empty public key")
+        PublicKey(it)
+    }
 }
