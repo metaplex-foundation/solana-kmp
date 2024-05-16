@@ -5,7 +5,8 @@ buffer = "1.3.1"
 ktor = "2.3.3"
 serialization = "1.6.0-RC"
 kotlinxCoroutines= "1.7.3"
-rpccore = "0.2.0"
+web3core = "0.3.0-beta2"
+rpccore = "0.2.5"
 kborsh = "0.1.0"
 
 # Plugin versions
@@ -28,7 +29,9 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref =
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 
-rpccore = { group = "io.github.funkatronics", name = "rpccore", version.ref = "rpccore" }
+web3core = { group = "com.solanamobile", name = "web3-core", version.ref = "web3core" }
+web3solana = { group = "com.solanamobile", name = "web3-solana", version.ref = "web3core" }
+rpccore = { group = "com.solanamobile", name = "rpc-core", version.ref = "rpccore" }
 kborsh = { group = "io.github.funkatronics", name = "kborsh", version.ref = "kborsh" }
 
 [plugins]

@@ -1,12 +1,13 @@
 package foundation.metaplex.rpc
 
 import foundation.metaplex.amount.SolAmount
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
+
+import com.solana.publickey.SolanaPublicKey as PublicKey
 
 /**
  * Represents an interface for making remote procedure calls (RPC).

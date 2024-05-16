@@ -40,6 +40,7 @@ kotlin {
                 implementation(project(mapOf("path" to ":base58")))
                 implementation(libs.buffer)
                 implementation(libs.crypto)
+                api(libs.web3solana)
             }
         }
         val commonTest by getting {

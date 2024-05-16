@@ -2,11 +2,12 @@ package foundation.metaplex.solana.transactions
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
+import com.solana.publickey.PublicKey
+import com.solana.publickey.SolanaPublicKey
 import foundation.metaplex.base58.decodeBase58
 import foundation.metaplex.base58.encodeToBase58String
 import foundation.metaplex.solana.util.Shortvec
 import foundation.metaplex.solanapublickeys.PUBLIC_KEY_LENGTH
-import foundation.metaplex.solanapublickeys.PublicKey
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
@@ -87,7 +88,7 @@ class SolanaMessage(
         val compiledInstructionsLength = instructions.sumOf { it.length }
         val instructionCount = Shortvec.encodeLength(instructions.size)
         val bufferSize = (MessageHeader.HEADER_LENGTH + RECENT_BLOCK_HASH_LENGTH + keyCount.size
-                + numKeys * PublicKey.PUBLIC_KEY_LENGTH + instructionCount.size
+                + numKeys * PUBLIC_KEY_LENGTH + instructionCount.size
                 + compiledInstructionsLength)
 
         val buffer = PlatformBuffer.allocate(size = bufferSize)
@@ -96,7 +97,7 @@ class SolanaMessage(
         buffer.writeByte(header.numReadonlyUnsignedAccounts)
         buffer.writeBytes(keyCount)
         for (accountKey in accountKeys) {
-            buffer.writeBytes(accountKey.publicKeyBytes)
+            buffer.writeBytes(accountKey.bytes)
         }
         buffer.writeBytes(recentBlockhash.decodeBase58())
         buffer.writeBytes(instructionCount)
@@ -111,7 +112,7 @@ class SolanaMessage(
         return buffer.readByteArray(bufferSize)
     }
 
-    override fun setFeePayer(publicKey: PublicKey) {
+    override fun setFeePayer(publicKey: com.solana.publickey.PublicKey) {
         this.feePayer = publicKey
     }
 
@@ -167,7 +168,7 @@ class SolanaMessage(
                     this.numReadonlySignedAccounts = numReadonlySignedAccounts.toByte()
                     this.numReadonlyUnsignedAccounts = numReadonlyUnsignedAccounts.toByte()
                 },
-                accountKeys = accountKeys.map { PublicKey(it) },
+                accountKeys = accountKeys.map { SolanaPublicKey.from(it) },
                 recentBlockhash = String().plus(recentBlockhash.encodeToBase58String()),
                 instructions = instructions
             )

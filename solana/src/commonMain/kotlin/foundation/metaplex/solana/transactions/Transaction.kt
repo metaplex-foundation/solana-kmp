@@ -1,7 +1,7 @@
 package foundation.metaplex.solana.transactions
 
-import com.metaplex.signer.Signer
-import foundation.metaplex.solanapublickeys.PublicKey
+import com.solana.publickey.PublicKey
+import com.solana.signer.Signer
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
@@ -51,7 +51,7 @@ data class AccountMeta(
     var isWritable: Boolean
 ) {
     override fun toString(): String {
-        return "pubkey:${publicKey.toBase58()}, signer:$isSigner, writable:$isWritable"
+        return "pubkey:${publicKey.string()}, signer:$isSigner, writable:$isWritable"
     }
 }
 

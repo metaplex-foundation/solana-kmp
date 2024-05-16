@@ -57,6 +57,7 @@ kotlin {
                 implementation(libs.kborsh)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.web3solana)
             }
         }
         val commonTest by getting {

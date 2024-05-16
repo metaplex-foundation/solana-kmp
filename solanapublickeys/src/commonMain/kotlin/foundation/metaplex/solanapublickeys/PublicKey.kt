@@ -2,13 +2,13 @@ package foundation.metaplex.solanapublickeys
 
 import com.ditchoom.buffer.PlatformBuffer
 import com.ditchoom.buffer.allocate
+import com.solana.publickey.SolanaPublicKey
 import foundation.metaplex.base58.decodeBase58
-import foundation.metaplex.base58.encodeToBase58String
 import diglol.crypto.Hash
 import kotlin.experimental.ExperimentalObjCName
 import kotlin.native.ObjCName
 
-const val PUBLIC_KEY_LENGTH = 32
+const val PUBLIC_KEY_LENGTH = SolanaPublicKey.PUBLIC_KEY_LENGTH
 
 /**
  * Defines a Program-Derived Address.
@@ -37,7 +37,7 @@ interface HasPublicKey {
  */
 @OptIn(ExperimentalObjCName::class)
 @ObjCName("PublicKey")
-data class PublicKey(val publicKeyBytes: ByteArray) {
+data class PublicKey(val publicKeyBytes: ByteArray) : SolanaPublicKey(publicKeyBytes) {
     init {
         require(publicKeyBytes.size <= PUBLIC_KEY_LENGTH) { "Invalid public key input" }
     }
@@ -46,9 +46,11 @@ data class PublicKey(val publicKeyBytes: ByteArray) {
 
     fun toByteArray(): ByteArray = publicKeyBytes
 
-    fun toBase58(): String = publicKeyBytes.encodeToBase58String()
+    fun toBase58(): String = base58()
 
     fun equals(pubkey: PublicKey): Boolean = this.publicKeyBytes.contentEquals(pubkey.toByteArray())
+
+    override fun string(): String = toBase58()
 
     override fun hashCode(): Int {
         var result = 17
@@ -59,24 +61,27 @@ data class PublicKey(val publicKeyBytes: ByteArray) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null) return false
-        val person = other as PublicKey
-        return equals(person)
+        if (!super.equals(other)) return false
+
+        other as PublicKey
+
+        return publicKeyBytes.contentEquals(other.publicKeyBytes)
     }
 
     override fun toString(): String = toBase58()
 
 
     companion object {
-        const val PUBLIC_KEY_LENGTH = 32
+        const val PUBLIC_KEY_LENGTH = SolanaPublicKey.PUBLIC_KEY_LENGTH
 
         fun readPubkey(bytes: ByteArray, offset: Int): PublicKey {
             val buf = bytes.copyOfRange(offset, offset + PUBLIC_KEY_LENGTH)
             return PublicKey(buf)
         }
 
-        suspend fun createProgramAddress(seeds: List<ByteArray>, programId: PublicKey): PublicKey {
+        suspend fun createProgramAddress(seeds: List<ByteArray>, programId: SolanaPublicKey): PublicKey {
             val seedSize = seeds.sumOf { it.count() }
-            val bufferSize = seedSize + programId.toByteArray().count() + "ProgramDerivedAddress".encodeToByteArray().count()
+            val bufferSize = seedSize + programId.bytes.count() + "ProgramDerivedAddress".encodeToByteArray().count()
             val buffer = PlatformBuffer.allocate(bufferSize)
             for (seed in seeds) {
                 require(seed.size <= 32) { "Max seed length exceeded" }
@@ -87,7 +92,7 @@ data class PublicKey(val publicKeyBytes: ByteArray) {
                 }
             }
             try {
-                buffer.writeBytes(programId.toByteArray())
+                buffer.writeBytes(programId.bytes)
                 buffer.writeBytes("ProgramDerivedAddress".encodeToByteArray())
             } catch (e: Exception) {
                 throw RuntimeException(e)
@@ -103,7 +108,7 @@ data class PublicKey(val publicKeyBytes: ByteArray) {
         @Throws(Exception::class)
         suspend fun findProgramAddress(
             seeds: List<ByteArray>,
-            programId: PublicKey
+            programId: SolanaPublicKey
         ): Pda {
             var nonce = 255
             val address: PublicKey
