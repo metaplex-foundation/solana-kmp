@@ -39,7 +39,7 @@ kotlin {
             dependencies {
                 implementation(project(mapOf("path" to ":base58")))
                 implementation(libs.buffer)
-                implementation(libs.crypto)
+                implementation(libs.crypto.hash)
                 api(libs.web3solana)
             }
         }

@@ -37,12 +37,13 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.crypto)
+                implementation(libs.crypto.hash)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.crypto.encoding)
             }
         }
         val jvmMain by getting

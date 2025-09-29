@@ -39,7 +39,7 @@ kotlin {
             dependencies {
                 implementation(project(mapOf("path" to ":signer")))
                 implementation(project(mapOf("path" to ":solanapublickeys")))
-                implementation(libs.crypto)
+                implementation(libs.crypto.pkc)
                 implementation(libs.web3core)
             }
         }
